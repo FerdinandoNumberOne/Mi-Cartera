@@ -1,894 +1,1007 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mi Cartera</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Cartera Final PRO</title>
 
-  <style>
-    :root {
-      --bg: #f4f6f9;
-      --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --border: #d1d5db;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --green: #16a34a;
-      --red: #dc2626;
-      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .app {
-      max-width: 1250px;
-      margin: 0 auto;
-      padding: 18px;
-    }
-
-    header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 34px;
-    }
-
-    h2 {
-      margin: 0 0 14px 0;
-      font-size: 26px;
-    }
-
-    .subtitle {
-      color: var(--muted);
-      margin-top: 6px;
-      font-size: 16px;
-      line-height: 1.35;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      margin-bottom: 18px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .metric {
-      background: #f9fafb;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px;
-    }
-
-    .metric .label {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 7px;
-    }
-
-    .metric .value {
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .positive {
-      color: var(--green);
-    }
-
-    .negative {
-      color: var(--red);
-    }
-
-    .neutral {
-      color: var(--muted);
-    }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    button {
-      border: 0;
-      border-radius: 12px;
-      padding: 11px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      background: var(--primary);
-      color: white;
-      font-size: 14px;
-    }
-
-    button:hover {
-      background: var(--primary-dark);
-    }
-
-    button.secondary {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    button.secondary:hover {
-      background: #d1d5db;
-    }
-
-    button.danger {
-      background: var(--red);
-    }
-
-    input,
-    select,
-    textarea {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 9px 10px;
-      font-size: 14px;
-      background: white;
-    }
-
-    input[type="number"] {
-      width: 120px;
-    }
-
-    input.symbol {
-      width: 180px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: white;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 1120px;
-    }
-
-    th,
-    td {
-      padding: 10px;
-      border-bottom: 1px solid var(--border);
-      text-align: right;
-      font-size: 14px;
-      vertical-align: middle;
-    }
-
-    th {
-      background: #f3f4f6;
-      color: #374151;
-      font-size: 13px;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-
-    th:first-child,
-    td:first-child,
-    th:nth-child(2),
-    td:nth-child(2),
-    th:nth-child(3),
-    td:nth-child(3),
-    th:nth-child(4),
-    td:nth-child(4) {
-      text-align: left;
-    }
-
-    td input,
-    td select {
-      width: 100%;
-      min-width: 90px;
-    }
-
-    .mini {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.4;
-    }
-
-    #tvChartContainer {
-      width: 100%;
-      height: 560px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      background: #ffffff;
-    }
-
-    #tvChartContainer iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-    }
-
-    .note {
-      line-height: 1.45;
-      color: #374151;
-      font-size: 14px;
-    }
-
-    .two-cols {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 18px;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 140px;
-      font-family: monospace;
-      font-size: 13px;
-    }
-
-    .fx-box {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 14px;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: #f9fafb;
-    }
-
-    .fx-box label {
-      font-weight: bold;
-    }
-
-    .fx-help {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    @media (max-width: 1000px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .two-cols {
-        grid-template-columns: 1fr;
-      }
-
-      #tvChartContainer {
-        height: 480px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .app {
-        padding: 12px;
-      }
-
-      header {
-        display: block;
-      }
-
-      h1 {
-        font-size: 34px;
-      }
-
-      .subtitle {
-        font-size: 17px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      button,
-      input,
-      select {
-        width: 100%;
-      }
-
-      .toolbar {
-        align-items: stretch;
-      }
-
-      .metric .value {
-        font-size: 28px;
-      }
-
-      #tvChartContainer {
-        height: 420px;
-      }
-    }
-  </style>
+<style>
+:root{
+  --bg:#eef2f7;
+  --card:#ffffff;
+  --ink:#111827;
+  --muted:#64748b;
+  --line:#dbe3ef;
+  --blue:#2563eb;
+  --green:#059669;
+  --red:#dc2626;
+  --amber:#d97706;
+  --soft:#f8fafc;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--ink);
+}
+header{
+  background:linear-gradient(135deg,#020617,#1e3a8a);
+  color:white;
+  padding:24px 16px;
+  text-align:center;
+}
+header h1{margin:0;font-size:24px}
+header p{margin:6px 0 0;color:#bfdbfe;font-size:13px}
+.wrap{max-width:1280px;margin:0 auto;padding:12px}
+.card{
+  background:white;
+  border-radius:18px;
+  padding:15px;
+  margin-bottom:15px;
+  box-shadow:0 8px 24px rgba(15,23,42,.08);
+  border:1px solid rgba(148,163,184,.25);
+}
+h2{font-size:18px;margin:0 0 12px}
+h3{font-size:15px;margin:0 0 10px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
+  gap:11px;
+}
+label{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  color:#334155;
+  margin-bottom:5px;
+}
+input,select,button{
+  width:100%;
+  padding:10px;
+  border-radius:11px;
+  border:1px solid var(--line);
+  font-size:15px;
+  background:white;
+}
+button{
+  border:none;
+  background:var(--blue);
+  color:white;
+  font-weight:850;
+  cursor:pointer;
+}
+button.secondary{background:#475569}
+button.good{background:#059669}
+button.warn{background:#d97706}
+button.danger{background:#dc2626}
+button.smallbtn{
+  padding:7px;
+  font-size:12px;
+  border-radius:8px;
+  margin-bottom:4px;
+}
+.btns{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
+  gap:9px;
+  margin-top:12px;
+}
+.note{
+  background:#fffbeb;
+  border-left:5px solid #f59e0b;
+  border-radius:12px;
+  padding:12px;
+  line-height:1.45;
+  font-size:13px;
+}
+.oknote{
+  background:#ecfdf5;
+  border-left-color:#10b981;
+}
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:white;
+}
+table{
+  border-collapse:collapse;
+  width:100%;
+  min-width:1900px;
+}
+th,td{
+  padding:8px;
+  border-bottom:1px solid var(--line);
+  font-size:13px;
+  text-align:right;
+  vertical-align:middle;
+}
+th:first-child,td:first-child{text-align:left}
+th{
+  background:#f8fafc;
+  color:#334155;
+}
+td input,td select{
+  min-width:82px;
+  padding:8px;
+  font-size:13px;
+}
+.ticker input{
+  text-transform:uppercase;
+  font-weight:900;
+}
+.summary{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
+  gap:10px;
+}
+.kpi{
+  background:var(--soft);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px;
+}
+.kpi small{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+}
+.kpi strong{
+  display:block;
+  font-size:20px;
+  margin-top:5px;
+}
+.pos{color:var(--green)!important;font-weight:900}
+.neg{color:var(--red)!important;font-weight:900}
+.muted{color:var(--muted);font-size:12px}
+.debug{
+  white-space:pre-wrap;
+  background:#0f172a;
+  color:#e5e7eb;
+  border-radius:12px;
+  padding:12px;
+  font-size:12px;
+  display:none;
+}
+.charts{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:14px;
+}
+.chartbox{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+}
+canvas{width:100%;height:250px}
+#tvChartContainer{
+  height:560px;
+  margin-top:16px;
+  border:1px solid #dbe3ef;
+  border-radius:14px;
+  overflow:hidden;
+  background:white;
+}
+#tvTechnicalContainer{
+  min-height:450px;
+  margin-top:16px;
+  border:1px solid #dbe3ef;
+  border-radius:14px;
+  overflow:hidden;
+  background:white;
+}
+@media(max-width:760px){
+  .wrap{padding:10px}
+  .summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi strong{font-size:17px}
+  table{min-width:1850px}
+  th,td{font-size:12px;padding:7px}
+  #tvChartContainer{height:520px}
+}
+</style>
 </head>
 
 <body>
-  <div class="app">
-    <header>
-      <div>
-        <h1>📊 Mi Cartera</h1>
-        <div class="subtitle">
-          Seguimiento de inversión, plusvalías, fiscalidad estimada, FX y gráfico TradingView.
-        </div>
-      </div>
 
-      <div class="toolbar">
-        <button onclick="addRow()">➕ Añadir activo</button>
-        <button class="secondary" onclick="savePortfolio()">💾 Guardar</button>
-        <button class="secondary" onclick="loadDemo()">🔄 Demo</button>
-      </div>
-    </header>
+<header>
+  <h1>📈 Mi Cartera Final PRO</h1>
+  <p>Cartera · FX · fiscalidad · Yahoo · Finnhub · TradingView · acciones · fondos · cripto</p>
+</header>
 
-    <section class="card">
-      <h2>Resumen</h2>
+<div class="wrap">
 
-      <div class="fx-box">
-        <label for="fxRate">FX actual EUR/USD</label>
-        <input id="fxRate" type="number" step="0.0001" value="1.15" onchange="updateFx()" />
-        <button class="secondary" onclick="updateFx()">Aplicar FX</button>
-        <div class="fx-help">
-          Usa el cambio EUR/USD. Ejemplo: si 1 € = 1,15 $, pon 1.15. Los activos en USD se convierten a euros dividiendo entre este FX.
-        </div>
-      </div>
+<section class="card note oknote">
+  <strong>Versión corregida:</strong>
+  acepta coma y punto decimal, y calcula correctamente el impacto del FX sobre la plusvalía.
+</section>
 
-      <div class="grid">
-        <div class="metric">
-          <div class="label">Invertido</div>
-          <div class="value" id="totalInvested">0,00 €</div>
-        </div>
-
-        <div class="metric">
-          <div class="label">Valor actual</div>
-          <div class="value" id="totalValue">0,00 €</div>
-        </div>
-
-        <div class="metric">
-          <div class="label">Resultado latente</div>
-          <div class="value" id="totalPnL">0,00 €</div>
-        </div>
-
-        <div class="metric">
-          <div class="label">Fiscalidad estimada si vendes todo</div>
-          <div class="value" id="estimatedTax">0,00 €</div>
-        </div>
-
-        <div class="metric">
-          <div class="label">FX usado EUR/USD</div>
-          <div class="value" id="fxShown">1,1500</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Cartera</h2>
-
-      <div class="toolbar">
-        <button onclick="calculateAll()">🧮 Recalcular</button>
-        <button class="secondary" onclick="exportData()">⬇️ Exportar JSON</button>
-        <button class="secondary" onclick="importDataFromBox()">⬆️ Importar JSON</button>
-        <button class="danger" onclick="clearPortfolio()">🗑️ Borrar cartera</button>
-      </div>
-
-      <div class="table-wrap">
-        <div style="margin-bottom:10px; font-weight:bold;">
-  ⚡ FX usado: <span id="fxShown"></span>
-</div>
-        <table>
-          <thead>
-            <tr>
-              <th>Activo</th>
-              <th>Tipo</th>
-              <th>Ticker TradingView</th>
-              <th>Divisa</th>
-              <th>Unidades</th>
-              <th>Precio compra</th>
-              <th>Gastos compra</th>
-              <th>Precio actual</th>
-              <th>Invertido €</th>
-              <th>Valor actual €</th>
-              <th>Plusvalía €</th>
-              <th>%</th>
-              <th>Impuesto estimado</th>
-              <th>Gráfico</th>
-            </tr>
-          </thead>
-          <tbody id="positionsBody"></tbody>
-        </table>
-      </div>
-
-      <p class="mini">
-        Importante: si la divisa es USD, los importes se convierten a euros usando el FX EUR/USD de arriba.
-        Si la divisa es EUR, no se convierte. Para GBP/CHF, de momento se tratan como EUR para no complicar el cálculo.
-      </p>
-    </section>
-
-    <section class="card">
-      <h2>Gráfico TradingView</h2>
-
-      <div class="toolbar">
-        <label>
-          Símbolo:
-          <input id="tvSymbol" class="symbol" value="NASDAQ:NVDA" />
-        </label>
-
-        <label>
-          Intervalo:
-          <select id="tvInterval">
-            <option value="D">Diario</option>
-            <option value="W">Semanal</option>
-            <option value="M">Mensual</option>
-            <option value="60">1 hora</option>
-            <option value="15">15 minutos</option>
-          </select>
-        </label>
-
-        <button onclick="loadTradingViewChart()">📈 Cargar gráfico</button>
-        <button class="secondary" onclick="loadSelectedFromFirstRow()">Usar 1ª fila</button>
-      </div>
-
-      <div class="note" style="margin-bottom: 12px;">
-        <strong>Ejemplos:</strong><br />
-        NVIDIA → <strong>NASDAQ:NVDA</strong><br />
-        Tesla → <strong>NASDAQ:TSLA</strong><br />
-        Apple → <strong>NASDAQ:AAPL</strong><br />
-        Microsoft → <strong>NASDAQ:MSFT</strong><br />
-        Bitcoin → <strong>BITSTAMP:BTCUSD</strong><br />
-        Ethereum → <strong>BITSTAMP:ETHUSD</strong><br />
-        Repsol → <strong>BME:REP</strong><br />
-        Enagás → <strong>BME:ENG</strong>
-      </div>
-
-      <div id="tvChartContainer"></div>
-    </section>
-
-    <section class="two-cols">
-      <div class="card">
-        <h2>Importar / exportar datos</h2>
-        <p class="note">
-          Aquí puedes pegar una copia JSON de tu cartera para recuperarla o copiar la que genere el botón Exportar.
-        </p>
-        <textarea id="dataBox"></textarea>
-      </div>
-
-      <div class="card">
-        <h2>Notas importantes</h2>
-        <div class="note">
-          <p><strong>1.</strong> El cálculo fiscal es orientativo.</p>
-          <p><strong>2.</strong> Las ganancias positivas tributan de forma progresiva como ahorro.</p>
-          <p><strong>3.</strong> El FX EUR/USD se aplica a posiciones en USD.</p>
-          <p><strong>4.</strong> Los datos se guardan en este navegador mediante localStorage.</p>
-        </div>
-      </div>
-    </section>
+<section class="card">
+  <h2>🔑 Configuración</h2>
+  <div class="grid">
+    <div>
+      <label>API Key Finnhub</label>
+      <input id="apiKey" placeholder="Opcional para Finnhub">
+    </div>
+    <div>
+      <label>FX actual USD→EUR</label>
+      <input id="fxNow" placeholder="Ej. 0,86957 o 0.86957">
+    </div>
+    <div>
+      <label>Fecha valoración</label>
+      <input id="valuationDate" type="date">
+    </div>
   </div>
 
-  <script>
-    const TAX_BRACKETS = [
-      { upTo: 6000, rate: 0.19 },
-      { upTo: 50000, rate: 0.21 },
-      { upTo: 200000, rate: 0.23 },
-      { upTo: 300000, rate: 0.27 },
-      { upTo: Infinity, rate: 0.30 }
-    ];
+  <div class="btns">
+    <button onclick="saveApi()">Guardar API</button>
+    <button class="secondary" onclick="clearApi()">Borrar API</button>
+    <button class="good" onclick="saveAll()">Guardar cartera</button>
+    <button class="secondary" onclick="loadAll(true)">Cargar cartera</button>
+  </div>
+</section>
 
-    let portfolio = [];
-    let fxRate = 1.15;
+<section class="card">
+  <h2>💼 Posiciones</h2>
 
-    const demoPortfolio = [
-      {
-        name: "NVIDIA",
-        type: "Acción",
-        tv: "NASDAQ:NVDA",
-        currency: "USD",
-        units: 10,
-        buyPrice: 90,
-        currentPrice: 210.69
-      },
-      {
-        name: "Tesla",
-        type: "Acción",
-        tv: "NASDAQ:TSLA",
-        currency: "USD",
-        units: 8,
-        buyPrice: 180,
-        currentPrice: 220
-      },
-      {
-        name: "Repsol",
-        type: "Acción",
-        tv: "BME:REP",
-        currency: "EUR",
-        units: 100,
-        buyPrice: 13.5,
-        currentPrice: 15.2
-      },
-      {
-        name: "Enagás",
-        type: "Acción",
-        tv: "BME:ENG",
-        currency: "EUR",
-        units: 80,
-        buyPrice: 14.2,
-        currentPrice: 13.7
-      }
-    ];
-
-    function n(value) {
-      const number = Number(String(value).replace(",", "."));
-      return Number.isFinite(number) ? number : 0;
-    }
-
-    function euro(value) {
-      const number = Number(value) || 0;
-      return number.toLocaleString("es-ES", {
-        style: "currency",
-        currency: "EUR",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-    }
-
-    function pct(value) {
-      const number = Number(value) || 0;
-      return number.toLocaleString("es-ES", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }) + "%";
-    }
-
-    function toEUR(amount, currency) {
-      const value = n(amount);
-      const fx = n(fxRate) || 1;
-
-      if (currency === "USD") {
-        return value / fx;
-      }
-
-      return value;
-    }
-
-    function calculateTax(gain) {
-      let remaining = Math.max(0, gain);
-      let previousLimit = 0;
-      let tax = 0;
-
-      for (const bracket of TAX_BRACKETS) {
-        if (remaining <= 0) break;
-
-        const bracketSize = bracket.upTo - previousLimit;
-        const taxable = Math.min(remaining, bracketSize);
-
-        tax += taxable * bracket.rate;
-        remaining -= taxable;
-        previousLimit = bracket.upTo;
-      }
-
-      return tax;
-    }
-
-    function rowHtml(position, index) {
-      const units = n(position.units);
-      const buyPrice = n(position.buyPrice);
-      const currentPrice = n(position.currentPrice);
-
-      const gastos = n(position.gastos || 0);
-const investedOriginal = units * buyPrice + gastos;
-      const valueOriginal = units * currentPrice;
-
-      const investedEUR = toEUR(investedOriginal, position.currency);
-      const valueEUR = toEUR(valueOriginal, position.currency);
-
-      const pnl = valueEUR - investedEUR;
-      const pnlPct = investedEUR === 0 ? 0 : (pnl / investedEUR) * 100;
-      const tax = calculateTax(pnl);
-
-      const pnlClass = pnl > 0 ? "positive" : pnl < 0 ? "negative" : "neutral";
-
-      return `
+  <div class="table-wrap">
+    <table id="positions">
+      <thead>
         <tr>
-          <td>
-            <input value="${position.name || ""}" onchange="updateField(${index}, 'name', this.value)" />
-          </td>
-
-          <td>
-            <select onchange="updateField(${index}, 'type', this.value)">
-              <option ${position.type === "Acción" ? "selected" : ""}>Acción</option>
-              <option ${position.type === "ETF" ? "selected" : ""}>ETF</option>
-              <option ${position.type === "Fondo" ? "selected" : ""}>Fondo</option>
-              <option ${position.type === "Cripto" ? "selected" : ""}>Cripto</option>
-              <option ${position.type === "Monetario" ? "selected" : ""}>Monetario</option>
-              <option ${position.type === "Otro" ? "selected" : ""}>Otro</option>
-            </select>
-          </td>
-
-          <td>
-            <input value="${position.tv || ""}" onchange="updateField(${index}, 'tv', this.value)" />
-          </td>
-
-          <td>
-            <select onchange="updateField(${index}, 'currency', this.value)">
-              <option ${position.currency === "EUR" ? "selected" : ""}>EUR</option>
-              <option ${position.currency === "USD" ? "selected" : ""}>USD</option>
-              <option ${position.currency === "GBP" ? "selected" : ""}>GBP</option>
-              <option ${position.currency === "CHF" ? "selected" : ""}>CHF</option>
-            </select>
-          </td>
-
-          <td>
-            <input type="number" step="0.0001" value="${position.units}" onchange="updateField(${index}, 'units', this.value)" />
-          </td>
-
-          <td>
-            <input type="number" step="0.0001" value="${position.buyPrice}" onchange="updateField(${index}, 'buyPrice', this.value)" />
-          </td>
-
-          <td>
-            <input type="number" step="0.0001" value="${position.currentPrice}" onchange="updateField(${index}, 'currentPrice', this.value)" />
-          </td>
-
-          <td>${euro(investedEUR)}</td>
-          <td>${euro(valueEUR)}</td>
-          <td class="${pnlClass}"><strong>${euro(pnl)}</strong></td>
-          <td class="${pnlClass}"><strong>${pct(pnlPct)}</strong></td>
-          <td>${euro(tax)}</td>
-
-          <td>
-            <button class="secondary" onclick="useChartSymbol(${index})">📈</button>
-            <button class="danger" onclick="deleteRow(${index})">X</button>
-          </td>
+          <th>Ticker / ISIN</th>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Fuente</th>
+          <th>Símbolo TV</th>
+          <th>Fecha compra</th>
+          <th>Antigüedad</th>
+          <th>Moneda</th>
+          <th>Precio compra</th>
+          <th>Unidades</th>
+          <th>FX compra</th>
+          <th>Comisión compra €</th>
+          <th>Precio actual manual</th>
+          <th>Comisión venta €</th>
+          <th>Dividendos / cupón / staking €</th>
+          <th>Ret. extranj. %</th>
+          <th>Ret. España %</th>
+          <th>Precio usado</th>
+          <th>Valor €</th>
+          <th>Coste €</th>
+          <th>Ganancia €</th>
+          <th>Efecto precio €</th>
+          <th>Efecto FX €</th>
+          <th>Rentab.</th>
+          <th>Acciones</th>
         </tr>
-      `;
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="btns">
+    <button onclick="addRow()">➕ Añadir posición</button>
+    <button class="warn" onclick="calculateAll()">📈 Calcular / actualizar</button>
+    <button class="good" onclick="exportCSV()">⬇️ Exportar CSV</button>
+    <button class="secondary" onclick="exportJSON()">⬇️ Copia JSON</button>
+    <button class="secondary" onclick="toggleDebug()">🐞 Debug</button>
+    <button class="danger" onclick="clearPortfolio()">🗑️ Vaciar</button>
+  </div>
+</section>
+
+<section class="card">
+  <h2>🧾 Ajustes fiscales globales</h2>
+  <div class="grid">
+    <div>
+      <label>Otras plusvalías realizadas (€)</label>
+      <input id="otherGains" value="0">
+    </div>
+    <div>
+      <label>Minusvalías realizadas / pendientes (€)</label>
+      <input id="losses" value="0">
+    </div>
+    <div>
+      <label>Gastos custodia / administración (€)</label>
+      <input id="custody" value="0">
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>📌 Resumen</h2>
+  <div id="kpis" class="summary"></div>
+  <div id="taxDetail" style="margin-top:14px"></div>
+  <div id="debug" class="debug"></div>
+</section>
+
+<section class="card">
+  <h2>📊 Gráficos internos</h2>
+  <div class="charts">
+    <div class="chartbox">
+      <h3>Distribución por valor</h3>
+      <canvas id="pieChart" width="420" height="280"></canvas>
+    </div>
+    <div class="chartbox">
+      <h3>Ganancia por posición</h3>
+      <canvas id="barChart" width="420" height="280"></canvas>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>📉 TradingView: gráfico y análisis técnico</h2>
+
+  <div class="grid">
+    <div>
+      <label>Símbolo TradingView</label>
+      <input id="tvSymbol" value="NASDAQ:NVDA" placeholder="Ej. NASDAQ:NVDA">
+    </div>
+
+    <div>
+      <label>Intervalo</label>
+      <select id="tvInterval">
+        <option value="D">Diario</option>
+        <option value="W">Semanal</option>
+        <option value="60">1 hora</option>
+        <option value="15">15 minutos</option>
+        <option value="M">Mensual</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="btns">
+    <button onclick="loadTradingViewChart()">📈 Cargar gráfico</button>
+    <button class="secondary" onclick="loadTechnicalAnalysis()">📊 Cargar análisis técnico</button>
+  </div>
+
+  <div class="note" style="margin-top:12px">
+    <strong>Ejemplos:</strong><br>
+    NVIDIA → <strong>NASDAQ:NVDA</strong><br>
+    Tesla → <strong>NASDAQ:TSLA</strong><br>
+    Apple → <strong>NASDAQ:AAPL</strong><br>
+    Microsoft → <strong>NASDAQ:MSFT</strong><br>
+    Bitcoin → <strong>BITSTAMP:BTCUSD</strong> o <strong>COINBASE:BTCUSD</strong><br>
+    Ethereum → <strong>BITSTAMP:ETHUSD</strong> o <strong>COINBASE:ETHUSD</strong><br>
+    Repsol → <strong>BME:REP</strong><br>
+    Enagás → <strong>BME:ENG</strong>
+  </div>
+
+  <div id="tvChartContainer"></div>
+  <div id="tvTechnicalContainer"></div>
+</section>
+
+<section class="card note">
+  <strong>Notas:</strong><br>
+  1. Si rellenas <strong>Precio actual manual</strong>, la app usa ese precio antes que Yahoo/Finnhub.<br>
+  2. Para fondos y monetarios, lo más estable es Fuente Manual.<br>
+  3. Yahoo puede fallar porque no es una API oficial estable.<br>
+  4. El cálculo fiscal es orientativo.
+</section>
+
+</div>
+
+<script>
+const TRAMOS = [
+  {hasta:6000,tipo:.19},
+  {hasta:50000,tipo:.21},
+  {hasta:200000,tipo:.23},
+  {hasta:300000,tipo:.27},
+  {hasta:Infinity,tipo:.30}
+];
+
+const $ = id => document.getElementById(id);
+const TB = () => $('positions').querySelector('tbody');
+
+/*
+  Parser corregido:
+  - "25,999" => 25.999
+  - "25.999" => 25.999
+  - "0,86957" => 0.86957
+  - "0.86957" => 0.86957
+  - "1.234,56" => 1234.56
+  - "1,234.56" => 1234.56
+*/
+function n(v){
+  if(v === undefined || v === null) return 0;
+  let s = String(v).trim();
+  if(!s) return 0;
+
+  s = s.replace(/\s/g,'');
+
+  const hasComma = s.includes(',');
+  const hasDot = s.includes('.');
+
+  if(hasComma && hasDot){
+    const lastComma = s.lastIndexOf(',');
+    const lastDot = s.lastIndexOf('.');
+
+    if(lastComma > lastDot){
+      s = s.replace(/\./g,'').replace(',','.');
+    } else {
+      s = s.replace(/,/g,'');
+    }
+  } else if(hasComma){
+    s = s.replace(',','.');
+  } else if(hasDot){
+    s = s;
+  }
+
+  const x = parseFloat(s);
+  return isNaN(x) ? 0 : x;
+}
+
+function eur(x){
+  return (x||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+}
+
+function usd(x){
+  return (x||0).toLocaleString('en-US',{style:'currency',currency:'USD'});
+}
+
+function pct(x){
+  return ((x||0)*100).toFixed(2)+' %';
+}
+
+function cls(x){
+  return x>=0?'pos':'neg';
+}
+
+function today(){
+  return new Date().toISOString().slice(0,10);
+}
+
+function tax(base){
+  let imp=0,prev=0,det=[];
+  if(base<=0) return {imp:0,det:[]};
+
+  for(const tr of TRAMOS){
+    let b = Math.min(base,tr.hasta)-prev;
+    if(b>0){
+      let cuota=b*tr.tipo;
+      imp+=cuota;
+      det.push({desde:prev,hasta:tr.hasta,base:b,tipo:tr.tipo,cuota});
+    }
+    prev=tr.hasta;
+    if(base<=tr.hasta) break;
+  }
+
+  return {imp,det};
+}
+
+function age(date){
+  if(!date) return '-';
+  let d = Math.floor((new Date($('valuationDate').value || today()) - new Date(date))/86400000);
+  let y = Math.max(d/365.25,0);
+  return `${Math.max(d,0)} días / ${y.toFixed(2)} años`;
+}
+
+function defaultTvSymbol(ticker,type){
+  const t = (ticker||'').toUpperCase();
+
+  if(t === 'NVDA') return 'NASDAQ:NVDA';
+  if(t === 'TSLA') return 'NASDAQ:TSLA';
+  if(t === 'AAPL') return 'NASDAQ:AAPL';
+  if(t === 'MSFT') return 'NASDAQ:MSFT';
+  if(t === 'AMZN') return 'NASDAQ:AMZN';
+  if(t === 'GOOGL') return 'NASDAQ:GOOGL';
+  if(t === 'BTC-USD' || t === 'BTC') return 'BITSTAMP:BTCUSD';
+  if(t === 'ETH-USD' || t === 'ETH') return 'BITSTAMP:ETHUSD';
+  if(t === 'REP') return 'BME:REP';
+  if(t === 'ENG') return 'BME:ENG';
+
+  return t;
+}
+
+function rowHTML(d={}){
+  return `
+<tr>
+<td class="ticker"><input value="${d.ticker||''}" placeholder="NVDA / BTC-USD / ISIN"></td>
+<td><input value="${d.name||''}" placeholder="Nombre"></td>
+<td>
+<select>
+<option ${d.type==='Acción'?'selected':''}>Acción</option>
+<option ${d.type==='ETF'?'selected':''}>ETF</option>
+<option ${d.type==='Fondo'?'selected':''}>Fondo</option>
+<option ${d.type==='Monetario'?'selected':''}>Monetario</option>
+<option ${d.type==='Cripto'?'selected':''}>Cripto</option>
+<option ${d.type==='Cash'?'selected':''}>Cash</option>
+</select>
+</td>
+<td>
+<select>
+<option ${d.source==='Manual'?'selected':''}>Manual</option>
+<option ${d.source==='Finnhub'?'selected':''}>Finnhub</option>
+<option ${d.source==='Yahoo'?'selected':''}>Yahoo</option>
+</select>
+</td>
+<td><input value="${d.tvSymbol||''}" placeholder="NASDAQ:NVDA"></td>
+<td><input type="date" value="${d.buyDate||''}"></td>
+<td class="muted">-</td>
+<td>
+<select>
+<option ${d.currency==='USD'?'selected':''}>USD</option>
+<option ${d.currency==='EUR'?'selected':''}>EUR</option>
+</select>
+</td>
+<td><input value="${d.buy||''}"></td>
+<td><input value="${d.units||''}"></td>
+<td><input value="${d.fxBuy||''}" placeholder="1 si EUR"></td>
+<td><input value="${d.buyFee??0}"></td>
+<td><input value="${d.manualPrice||''}"></td>
+<td><input value="${d.sellFee??0}"></td>
+<td><input value="${d.divGross??0}"></td>
+<td><input value="${d.foreignPct??(d.currency==='USD'?15:0)}"></td>
+<td><input value="${d.spainPct??19}"></td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td>
+  <button class="smallbtn secondary" onclick="loadTvFromRow(this)">TV</button>
+  <button class="smallbtn danger" onclick="this.closest('tr').remove(); calculateAll(); saveAll(false)">X</button>
+</td>
+</tr>`;
+}
+
+function addRow(d){
+  TB().insertAdjacentHTML('beforeend',rowHTML(d));
+  attachAutoSave();
+}
+
+function rows(){
+  return [...TB().rows].map(r=>{
+    let c=r.cells;
+    return{
+      ticker:c[0].querySelector('input').value.trim().toUpperCase(),
+      name:c[1].querySelector('input').value,
+      type:c[2].querySelector('select').value,
+      source:c[3].querySelector('select').value,
+      tvSymbol:c[4].querySelector('input').value.trim(),
+      buyDate:c[5].querySelector('input').value,
+      currency:c[7].querySelector('select').value,
+      buy:n(c[8].querySelector('input').value),
+      units:n(c[9].querySelector('input').value),
+      fxBuy:n(c[10].querySelector('input').value),
+      buyFee:n(c[11].querySelector('input').value),
+      manualPrice:n(c[12].querySelector('input').value),
+      sellFee:n(c[13].querySelector('input').value),
+      divGross:n(c[14].querySelector('input').value),
+      foreignPct:n(c[15].querySelector('input').value),
+      spainPct:n(c[16].querySelector('input').value),
+      _tr:r
+    }
+  });
+}
+
+function setCell(r,i,html,cl=''){
+  r.cells[i].innerHTML=html;
+  r.cells[i].className=cl;
+}
+
+async function getFinnhub(ticker){
+  const key=$('apiKey').value.trim();
+  if(!key) throw new Error('Falta API Finnhub');
+
+  const url=`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(ticker)}&token=${encodeURIComponent(key)}`;
+  const res=await fetch(url);
+  const data=await res.json();
+
+  if(!data || !data.c) throw new Error('Finnhub no devolvió precio');
+  return data.c;
+}
+
+async function getYahoo(ticker){
+  const url=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=1d`;
+  const res=await fetch(url);
+  const data=await res.json();
+
+  const result=data?.chart?.result?.[0];
+  const price=result?.meta?.regularMarketPrice;
+
+  if(!price) throw new Error('Yahoo no devolvió precio');
+  return price;
+}
+
+async function calculateAll(){
+  let data=rows();
+  let fxNow=n($('fxNow').value);
+  let debug=[];
+
+  let totalCost=0,totalValue=0,totalGain=0,totalPriceEffect=0,totalFxEffect=0;
+  let div=0,foreign=0,spain=0;
+  let alloc=[];
+
+  for(const d of data){
+    setCell(d._tr,6,age(d.buyDate),'muted');
+
+    if(!d.buy || !d.units){
+      debug.push(`${d.ticker||d.name||'(sin nombre)'}: faltan precio compra o unidades.`);
+      continue;
     }
 
-    function renderTable() {
-      const body = document.getElementById("positionsBody");
-      body.innerHTML = portfolio.map(rowHtml).join("");
-      calculateSummary();
+    let localFxBuy = d.currency==='USD' ? d.fxBuy : 1;
+    let localFxNow = d.currency==='USD' ? fxNow : 1;
+
+    if(d.currency==='USD' && !localFxBuy){
+      debug.push(`${d.ticker}: falta FX compra.`);
+      continue;
     }
 
-    function calculateSummary() {
-      let invested = 0;
-      let value = 0;
-      let gain = 0;
-
-      for (const p of portfolio) {
-        const units = n(p.units);
-        const buyPrice = n(p.buyPrice);
-        const currentPrice = n(p.currentPrice);
-
-        const investedOriginal = units * buyPrice;
-        const valueOriginal = units * currentPrice;
-
-        const investedEUR = toEUR(investedOriginal, p.currency);
-        const valueEUR = toEUR(valueOriginal, p.currency);
-
-        invested += investedEUR;
-        value += valueEUR;
-        gain += valueEUR - investedEUR;
-      }
-
-      const tax = calculateTax(gain);
-      const pnlClass = gain > 0 ? "positive" : gain < 0 ? "negative" : "neutral";
-
-      document.getElementById("totalInvested").textContent = euro(invested);
-      document.getElementById("totalValue").textContent = euro(value);
-
-      const pnlEl = document.getElementById("totalPnL");
-      pnlEl.textContent = euro(gain);
-      pnlEl.className = "value " + pnlClass;
-
-      document.getElementById("estimatedTax").textContent = euro(tax);
-      document.getElementById("fxShown").textContent = (n(fxRate) || 1).toFixed(4);
+    if(d.currency==='USD' && !localFxNow){
+      debug.push(`${d.ticker}: falta FX actual.`);
+      continue;
     }
 
-    function calculateAll() {
-      renderTable();
-      savePortfolio();
+    let price = d.manualPrice;
+
+    if(!price && d.source==='Finnhub'){
+      try{ price = await getFinnhub(d.ticker); }
+      catch(e){ debug.push(`${d.ticker}: Finnhub falla: ${e.message}`); }
     }
 
-    function updateFx() {
-      fxRate = n(document.getElementById("fxRate").value) || 1;
-      localStorage.setItem("miCarteraFxRate", String(fxRate));
-      renderTable();
+    if(!price && d.source==='Yahoo'){
+      try{ price = await getYahoo(d.ticker); }
+      catch(e){ debug.push(`${d.ticker}: Yahoo falla: ${e.message}`); }
     }
 
-    function updateField(index, field, value) {
-      if (!portfolio[index]) return;
-
-      if (["units", "buyPrice", "currentPrice"].includes(field)) {
-        portfolio[index][field] = n(value);
-      } else {
-        portfolio[index][field] = value;
-      }
-
-      renderTable();
-      savePortfolio();
+    if(!price){
+      debug.push(`${d.ticker||d.name}: falta precio actual manual o API válida.`);
+      continue;
     }
 
-    function addRow() {
-      portfolio.push({
-        name: "Nuevo activo",
-        type: "Acción",
-        tv: "NASDAQ:NVDA",
-        currency: "EUR",
-        units: 0,
-        buyPrice: 0,
-        gastos: 0,
-        currentPrice: 0
-      });
+    const costNoFees = d.buy * d.units * localFxBuy;
+    const cost = costNoFees + d.buyFee;
 
-      renderTable();
-      savePortfolio();
-    }
+    const valueAtBuyFx = price * d.units * localFxBuy;
+    const valueGross = price * d.units * localFxNow;
+    const value = valueGross - d.sellFee;
 
-    function deleteRow(index) {
-      portfolio.splice(index, 1);
-      renderTable();
-      savePortfolio();
-    }
+    const gain = value - cost;
 
-    function savePortfolio() {
-      localStorage.setItem("miCarteraPortfolio", JSON.stringify(portfolio));
-      localStorage.setItem("miCarteraFxRate", String(fxRate));
-    }
+    const priceEffect = (price - d.buy) * d.units * localFxBuy;
+    const fxEffect = price * d.units * (localFxNow - localFxBuy);
 
-    function loadPortfolio() {
-      const saved = localStorage.getItem("miCarteraPortfolio");
-      const savedFx = localStorage.getItem("miCarteraFxRate");
+    const ret = cost ? gain / cost : 0;
 
-      if (savedFx) {
-        fxRate = n(savedFx) || 1.15;
-      }
+    totalCost += cost;
+    totalValue += value;
+    totalGain += gain;
+    totalPriceEffect += priceEffect;
+    totalFxEffect += fxEffect;
 
-      document.getElementById("fxRate").value = fxRate;
+    div += d.divGross;
+    foreign += d.divGross * (d.foreignPct/100);
+    spain += d.divGross * (d.spainPct/100);
 
-      if (saved) {
-        try {
-          portfolio = JSON.parse(saved);
-        } catch (e) {
-          portfolio = JSON.parse(JSON.stringify(demoPortfolio));
-        }
-      } else {
-        portfolio = JSON.parse(JSON.stringify(demoPortfolio));
-      }
+    alloc.push({ticker:d.ticker||d.name,value,gain});
 
-      renderTable();
-    }
+    setCell(d._tr,17,d.currency==='USD'?usd(price):eur(price));
+    setCell(d._tr,18,eur(value));
+    setCell(d._tr,19,eur(cost));
+    setCell(d._tr,20,eur(gain),cls(gain));
+    setCell(d._tr,21,eur(priceEffect),cls(priceEffect));
+    setCell(d._tr,22,eur(fxEffect),cls(fxEffect));
+    setCell(d._tr,23,pct(ret),cls(ret));
+  }
 
-    function clearPortfolio() {
-      portfolio = [];
-      savePortfolio();
-      renderTable();
-    }
+  const base = Math.max(
+    Math.max(totalGain,0) + n($('otherGains').value) + div - n($('losses').value) - n($('custody').value),
+    0
+  );
 
-    function loadDemo() {
-      portfolio = JSON.parse(JSON.stringify(demoPortfolio));
-      fxRate = 1.15;
-      document.getElementById("fxRate").value = fxRate;
-      savePortfolio();
-      renderTable();
-      document.getElementById("tvSymbol").value = "NASDAQ:NVDA";
-      loadTradingViewChart();
-    }
+  const tx = tax(base);
+  const divTax = base && div ? tx.imp * (div/base) : 0;
+  const credit = Math.min(foreign,divTax);
+  const divNet = div - foreign - spain - Math.max(divTax - spain - credit,0);
+  const gainTax = base && totalGain>0 ? tx.imp*(Math.max(totalGain,0)/base) : 0;
 
-    function exportData() {
-      const data = {
-        fxRate: fxRate,
-        portfolio: portfolio
-      };
+  $('kpis').innerHTML = `
+<div class="kpi"><small>Valor cartera</small><strong>${eur(totalValue)}</strong></div>
+<div class="kpi"><small>Coste total</small><strong>${eur(totalCost)}</strong></div>
+<div class="kpi"><small>Ganancia latente</small><strong class="${cls(totalGain)}">${eur(totalGain)}</strong></div>
+<div class="kpi"><small>Rentabilidad</small><strong class="${cls(totalGain)}">${totalCost?pct(totalGain/totalCost):'0,00 %'}</strong></div>
+<div class="kpi"><small>Efecto precio</small><strong class="${cls(totalPriceEffect)}">${eur(totalPriceEffect)}</strong></div>
+<div class="kpi"><small>Efecto FX</small><strong class="${cls(totalFxEffect)}">${eur(totalFxEffect)}</strong></div>
+<div class="kpi"><small>Dividendos / cupones</small><strong>${eur(div)}</strong></div>
+<div class="kpi"><small>Dividendos netos estimados</small><strong>${eur(divNet)}</strong></div>
+<div class="kpi"><small>Base ahorro estimada</small><strong>${eur(base)}</strong></div>
+<div class="kpi"><small>IRPF estimado</small><strong>${eur(tx.imp)}</strong></div>
+<div class="kpi"><small>Ganancia tras IRPF aprox.</small><strong class="${cls(totalGain-gainTax)}">${eur(totalGain-gainTax)}</strong></div>
+`;
 
-      document.getElementById("dataBox").value = JSON.stringify(data, null, 2);
-    }
+  $('taxDetail').innerHTML = tx.det.length
+    ? '<h2>Detalle IRPF</h2><div class="table-wrap"><table style="min-width:650px"><tr><th>Tramo</th><th>Base</th><th>Tipo</th><th>Cuota</th></tr>' +
+      tx.det.map(x=>`<tr><td>${eur(x.desde)} - ${x.hasta===Infinity?'En adelante':eur(x.hasta)}</td><td>${eur(x.base)}</td><td>${pct(x.tipo)}</td><td>${eur(x.cuota)}</td></tr>`).join('') +
+      '</table></div>'
+    : '';
 
-    function importDataFromBox() {
-      const text = document.getElementById("dataBox").value.trim();
+  drawCharts(alloc);
+  $('debug').textContent = debug.length ? debug.join('\n') : 'Sin errores detectados.';
+  saveAll(false);
+}
 
-      if (!text) {
-        alert("Pega primero el JSON en la caja.");
-        return;
-      }
+function drawCharts(items){
+  drawPie(items);
+  drawBars(items);
+}
 
-      try {
-        const data = JSON.parse(text);
+function drawPie(items){
+  const c=$('pieChart'),ctx=c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
 
-        if (Array.isArray(data)) {
-          portfolio = data;
-        } else if (data && Array.isArray(data.portfolio)) {
-          portfolio = data.portfolio;
-          if (data.fxRate) {
-            fxRate = n(data.fxRate) || fxRate;
-            document.getElementById("fxRate").value = fxRate;
-          }
-        } else {
-          alert("El JSON debe ser una lista de posiciones o un objeto con portfolio.");
-          return;
-        }
+  const total=items.reduce((s,x)=>s+Math.max(x.value,0),0);
+  if(!total){ctx.fillText('Sin datos',20,30);return;}
 
-        savePortfolio();
-        renderTable();
-      } catch (e) {
-        alert("JSON incorrecto. Revisa el texto pegado.");
-      }
-    }
+  let a=-Math.PI/2;
+  const colors=['#2563eb','#10b981','#f97316','#8b5cf6','#ef4444','#14b8a6','#eab308'];
 
-    function useChartSymbol(index) {
-      const symbol = portfolio[index] && portfolio[index].tv ? portfolio[index].tv : "NASDAQ:NVDA";
-      document.getElementById("tvSymbol").value = symbol;
-      loadTradingViewChart();
-      document.getElementById("tvChartContainer").scrollIntoView({ behavior: "smooth" });
-    }
+  items.forEach((it,i)=>{
+    let slice=Math.max(it.value,0)/total*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(135,135);
+    ctx.arc(135,135,100,a,a+slice);
+    ctx.closePath();
+    ctx.fillStyle=colors[i%colors.length];
+    ctx.fill();
+    a+=slice;
+    ctx.fillStyle='#111827';
+    ctx.fillText(`${it.ticker} ${Math.round(it.value/total*100)}%`,270,30+i*20);
+  });
+}
 
-    function loadSelectedFromFirstRow() {
-      if (portfolio.length > 0 && portfolio[0].tv) {
-        document.getElementById("tvSymbol").value = portfolio[0].tv;
-      }
+function drawBars(items){
+  const c=$('barChart'),ctx=c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
 
-      loadTradingViewChart();
-    }
+  if(!items.length){ctx.fillText('Sin datos',20,30);return;}
 
-    function loadTradingViewChart() {
-      const container = document.getElementById("tvChartContainer");
-      const symbol = encodeURIComponent(document.getElementById("tvSymbol").value.trim() || "NASDAQ:NVDA");
-      const interval = encodeURIComponent(document.getElementById("tvInterval").value || "D");
+  const max=Math.max(...items.map(x=>Math.abs(x.gain)),1);
 
-      const src =
-        "https://s.tradingview.com/widgetembed/?" +
-        "frameElementId=tvChartFrame" +
-        "&symbol=" + symbol +
-        "&interval=" + interval +
-        "&hidesidetoolbar=0" +
-        "&symboledit=1" +
-        "&saveimage=1" +
-        "&toolbarbg=f1f3f6" +
-        "&studies=[]" +
-        "&theme=light" +
-        "&style=1" +
-        "&timezone=Europe%2FMadrid" +
-        "&withdateranges=1" +
-        "&hideideas=1" +
-        "&locale=es";
+  items.forEach((it,i)=>{
+    const x=40+i*55;
+    const h=Math.abs(it.gain)/max*95;
 
-      container.innerHTML = "";
+    ctx.fillStyle=it.gain>=0?'#059669':'#dc2626';
+    ctx.fillRect(x,135-(it.gain>=0?h:0),35,h);
 
-      const frame = document.createElement("iframe");
-      frame.id = "tvChartFrame";
-      frame.title = "Gráfico TradingView";
-      frame.src = src;
-      frame.scrolling = "no";
-      frame.allowFullscreen = true;
+    ctx.fillStyle='#111827';
+    ctx.fillText(it.ticker,x,250);
+  });
 
-      container.appendChild(frame);
-    }
+  ctx.strokeStyle='#94a3b8';
+  ctx.beginPath();
+  ctx.moveTo(20,135);
+  ctx.lineTo(c.width-20,135);
+  ctx.stroke();
+}
 
-    window.addEventListener("load", function () {
-      loadPortfolio();
-      loadTradingViewChart();
+function loadTvFromRow(btn){
+  const r = btn.closest('tr');
+  const d = rows().find(x=>x._tr===r);
+
+  let symbol = d.tvSymbol || defaultTvSymbol(d.ticker,d.type);
+  $('tvSymbol').value = symbol;
+
+  loadTradingViewChart();
+  setTimeout(()=>loadTechnicalAnalysis(),500);
+
+  document.getElementById('tvChartContainer').scrollIntoView({behavior:'smooth'});
+}
+
+function loadTradingViewChart(){
+  const symbol = $('tvSymbol').value || 'NASDAQ:NVDA';
+  const interval = $('tvInterval').value || 'D';
+
+  const cont = $('tvChartContainer');
+  cont.innerHTML = '';
+
+  const widgetDiv = document.createElement('div');
+  widgetDiv.className = 'tradingview-widget-container__widget';
+  widgetDiv.style.height = '100%';
+  widgetDiv.style.width = '100%';
+  cont.appendChild(widgetDiv);
+
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+  script.async = true;
+
+  script.innerHTML = JSON.stringify({
+    autosize:true,
+    symbol:symbol,
+    interval:interval,
+    timezone:'Europe/Madrid',
+    theme:'light',
+    style:'1',
+    locale:'es',
+    enable_publishing:false,
+    allow_symbol_change:true,
+    hide_side_toolbar:false,
+    hide_top_toolbar:false,
+    hide_legend:false,
+    hide_volume:false,
+    calendar:false,
+    support_host:'https://www.tradingview.com',
+    studies:[
+      'MASimple@tv-basicstudies',
+      'RSI@tv-basicstudies',
+      'MACD@tv-basicstudies'
+    ]
+  });
+
+  cont.appendChild(script);
+}
+
+function loadTechnicalAnalysis(){
+  const symbol = $('tvSymbol').value || 'NASDAQ:NVDA';
+
+  const cont = $('tvTechnicalContainer');
+  cont.innerHTML = '';
+
+  const widgetDiv = document.createElement('div');
+  widgetDiv.className = 'tradingview-widget-container__widget';
+  cont.appendChild(widgetDiv);
+
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js';
+  script.async = true;
+
+  script.innerHTML = JSON.stringify({
+    interval:'1D',
+    width:'100%',
+    height:450,
+    symbol:symbol,
+    showIntervalTabs:true,
+    isTransparent:false,
+    displayMode:'single',
+    locale:'es',
+    colorTheme:'light'
+  });
+
+  cont.appendChild(script);
+}
+
+function saveApi(){
+  localStorage.setItem('finnhub_api_key',$('apiKey').value.trim());
+  alert('API guardada.');
+}
+
+function clearApi(){
+  localStorage.removeItem('finnhub_api_key');
+  $('apiKey').value='';
+}
+
+function saveAll(show=true){
+  const data={
+    api:$('apiKey').value,
+    fxNow:$('fxNow').value,
+    valuationDate:$('valuationDate').value,
+    otherGains:$('otherGains').value,
+    losses:$('losses').value,
+    custody:$('custody').value,
+    positions:rows().map(({_tr,...x})=>x)
+  };
+
+  localStorage.setItem('cartera_final_pro',JSON.stringify(data));
+
+  if(show) alert('Cartera guardada.');
+}
+
+function loadAll(show=false){
+  $('valuationDate').value = $('valuationDate').value || today();
+
+  const api=localStorage.getItem('finnhub_api_key');
+  if(api) $('apiKey').value=api;
+
+  const raw=localStorage.getItem('cartera_final_pro');
+  TB().innerHTML='';
+
+  if(!raw){
+    addRow({
+      ticker:'NVDA',
+      name:'NVIDIA',
+      type:'Acción',
+      source:'Manual',
+      tvSymbol:'NASDAQ:NVDA',
+      currency:'USD',
+      buy:'25,999',
+      units:'450',
+      fxBuy:'0,8825',
+      manualPrice:'210,69',
+      foreignPct:15,
+      spainPct:19,
+      buyFee:0,
+      sellFee:0,
+      divGross:0
     });
-  </script>
+    calculateAll();
+    return;
+  }
+
+  const d=JSON.parse(raw);
+
+  ['fxNow','valuationDate','otherGains','losses','custody'].forEach(id=>{
+    if(d[id]!==undefined) $(id).value=d[id];
+  });
+
+  if(d.api && !api) $('apiKey').value=d.api;
+
+  (d.positions||[]).forEach(addRow);
+
+  if(!(d.positions||[]).length) addRow();
+
+  calculateAll();
+
+  if(show) alert('Cartera cargada.');
+}
+
+function clearPortfolio(){
+  if(confirm('¿Vaciar posiciones?')){
+    TB().innerHTML='';
+    addRow();
+    calculateAll();
+    saveAll(false);
+  }
+}
+
+function exportCSV(){
+  const header=[
+    'Ticker','Nombre','Tipo','Fuente','TradingView','Fecha compra','Moneda','Precio compra','Unidades',
+    'FX compra','Comision compra EUR','Precio actual manual','Comision venta EUR',
+    'Dividendos EUR','Ret extranj %','Ret España %'
+  ];
+
+  const lines=[header.join(';')];
+
+  rows().forEach(d=>{
+    lines.push([
+      d.ticker,d.name,d.type,d.source,d.tvSymbol,d.buyDate,d.currency,d.buy,d.units,d.fxBuy,d.buyFee,
+      d.manualPrice,d.sellFee,d.divGross,d.foreignPct,d.spainPct
+    ].join(';'));
+  });
+
+  download('mi_cartera_final_pro.csv',lines.join('\n'),'text/csv;charset=utf-8');
+}
+
+function exportJSON(){
+  saveAll(false);
+  download('mi_cartera_final_pro_backup.json',localStorage.getItem('cartera_final_pro')||'{}','application/json');
+}
+
+function download(name,content,type){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function toggleDebug(){
+  const d=$('debug');
+  d.style.display = d.style.display==='block' ? 'none' : 'block';
+}
+
+function attachAutoSave(){
+  document.querySelectorAll('input,select').forEach(el=>{
+    el.onchange=()=>saveAll(false);
+  });
+}
+
+['otherGains','losses','custody','valuationDate','fxNow'].forEach(id=>{
+  $(id).addEventListener('input',()=>saveAll(false));
+});
+
+loadAll(false);
+attachAutoSave();
+</script>
+
 </body>
 </html>
