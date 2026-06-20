@@ -593,7 +593,8 @@
       const buyPrice = n(position.buyPrice);
       const currentPrice = n(position.currentPrice);
 
-      const investedOriginal = units * buyPrice;
+      const gastos = n(position.gastos || 0);
+const investedOriginal = units * buyPrice + gastos;
       const valueOriginal = units * currentPrice;
 
       const investedEUR = toEUR(investedOriginal, position.currency);
