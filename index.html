@@ -752,6 +752,140 @@ function attachAutoSave(){
 loadAll(false);
 attachAutoSave();
 </script>
+<!-- ========================================================= -->
+<!-- BLOQUE NUEVO: GRÁFICOS Y ANÁLISIS TÉCNICO TRADINGVIEW -->
+<!-- Pegar justo antes de </body> -->
+<!-- ========================================================= -->
 
+<section class="card">
+  <h2>📉 Gráfico y análisis técnico</h2>
+
+  <div class="grid">
+    <div>
+      <label>Símbolo TradingView</label>
+      <input id="tvSymbol" value="NASDAQ:NVDA" placeholder="Ej. NASDAQ:NVDA">
+    </div>
+
+    <div>
+      <label>Intervalo</label>
+      <select id="tvInterval">
+        <option value="D">Diario</option>
+        <option value="W">Semanal</option>
+        <option value="60">1 hora</option>
+        <option value="15">15 minutos</option>
+        <option value="M">Mensual</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="btns">
+    <button onclick="tvCargarGrafico()">📈 Cargar gráfico</button>
+    <button class="secondary" onclick="tvCargarAnalisis()">📊 Cargar análisis técnico</button>
+  </div>
+
+  <div class="note" style="margin-top:12px">
+    <strong>Ejemplos de símbolos:</strong>
+    <br>NVDA → <strong>NASDAQ:NVDA</strong>
+    <br>Apple → <strong>NASDAQ:AAPL</strong>
+    <br>Tesla → <strong>NASDAQ:TSLA</strong>
+    <br>Microsoft → <strong>NASDAQ:MSFT</strong>
+    <br>Bitcoin → <strong>BITSTAMP:BTCUSD</strong> o <strong>COINBASE:BTCUSD</strong>
+    <br>Ethereum → <strong>BITSTAMP:ETHUSD</strong> o <strong>COINBASE:ETHUSD</strong>
+    <br>Repsol → prueba <strong>BME:REP</strong>
+    <br>Enagás → prueba <strong>BME:ENG</strong>
+  </div>
+
+  <div
+    id="tvChartContainer"
+    style="height:560px;margin-top:16px;border:1px solid #dbe3ef;border-radius:14px;overflow:hidden;background:white">
+  </div>
+
+  <div
+    id="tvTechnicalContainer"
+    style="margin-top:16px;border:1px solid #dbe3ef;border-radius:14px;overflow:hidden;background:white">
+  </div>
+</section>
+
+<script>
+function tvLimpiarContenedor(id){
+  const cont = document.getElementById(id);
+  cont.innerHTML = "";
+  return cont;
+}
+
+function tvCargarGrafico(){
+  const symbol = document.getElementById("tvSymbol").value || "NASDAQ:NVDA";
+  const interval = document.getElementById("tvInterval").value || "D";
+
+  const cont = tvLimpiarContenedor("tvChartContainer");
+
+  const widgetDiv = document.createElement("div");
+  widgetDiv.className = "tradingview-widget-container__widget";
+  widgetDiv.style.height = "100%";
+  widgetDiv.style.width = "100%";
+
+  cont.appendChild(widgetDiv);
+
+  const script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+  script.async = true;
+
+  script.innerHTML = JSON.stringify({
+    "autosize": true,
+    "symbol": symbol,
+    "interval": interval,
+    "timezone": "Europe/Madrid",
+    "theme": "light",
+    "style": "1",
+    "locale": "es",
+    "enable_publishing": false,
+    "allow_symbol_change": true,
+    "hide_side_toolbar": false,
+    "hide_top_toolbar": false,
+    "hide_legend": false,
+    "hide_volume": false,
+    "calendar": false,
+    "support_host": "https://www.tradingview.com",
+    "studies": [
+      "MASimple@tv-basicstudies",
+      "RSI@tv-basicstudies",
+      "MACD@tv-basicstudies"
+    ]
+  });
+
+  cont.appendChild(script);
+}
+
+function tvCargarAnalisis(){
+  const symbol = document.getElementById("tvSymbol").value || "NASDAQ:NVDA";
+
+  const cont = tvLimpiarContenedor("tvTechnicalContainer");
+
+  const widgetDiv = document.createElement("div");
+  widgetDiv.className = "tradingview-widget-container__widget";
+
+  cont.appendChild(widgetDiv);
+
+  const script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js";
+  script.async = true;
+
+  script.innerHTML = JSON.stringify({
+    "interval": "1D",
+    "width": "100%",
+    "height": 450,
+    "symbol": symbol,
+    "showIntervalTabs": true,
+    "isTransparent": false,
+    "displayMode": "single",
+    "locale": "es",
+    "colorTheme": "light"
+  });
+
+  cont.appendChild(script);
+}
+</script>
 </body>
 </html>
