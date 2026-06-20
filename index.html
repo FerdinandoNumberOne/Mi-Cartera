@@ -794,47 +794,45 @@ function loadTvFromRow(btn){
 }
 
 function loadTradingViewChart(){
+
   const symbol = $('tvSymbol').value || 'NASDAQ:NVDA';
   const interval = $('tvInterval').value || 'D';
 
-  const cont = $('tvChartContainer');
-  cont.innerHTML = '';
+  const container = $('tvChartContainer');
+  container.innerHTML = '<div id="tv_chart_inner" style="height:100%;width:100%"></div>';
 
-  const widgetDiv = document.createElement('div');
-  widgetDiv.className = 'tradingview-widget-container__widget';
-  widgetDiv.style.height = '100%';
-  widgetDiv.style.width = '100%';
-  cont.appendChild(widgetDiv);
+  if (!window.tvLoaded) {
+    const script = document.createElement('script');
+    script.src = 'https://s3.tradingview.com/tv.js';
 
-  const script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-  script.async = true;
+    script.onload = () => {
+      window.tvLoaded = true;
+      createTVChart(symbol, interval);
+    };
 
-  script.innerHTML = JSON.stringify({
-    autosize:true,
-    symbol:symbol,
-    interval:interval,
-    timezone:'Europe/Madrid',
-    theme:'light',
-    style:'1',
-    locale:'es',
-    enable_publishing:false,
-    allow_symbol_change:true,
-    hide_side_toolbar:false,
-    hide_top_toolbar:false,
-    hide_legend:false,
-    hide_volume:false,
-    calendar:false,
-    support_host:'https://www.tradingview.com',
-    studies:[
-      'MASimple@tv-basicstudies',
-      'RSI@tv-basicstudies',
-      'MACD@tv-basicstudies'
-    ]
+    document.body.appendChild(script);
+  } else {
+    createTVChart(symbol, interval);
+  }
+}
+
+function createTVChart(symbol, interval){
+  new TradingView.widget({
+    container_id: "tv_chart_inner",
+    symbol: symbol,
+    interval: interval,
+    timezone: "Europe/Madrid",
+    theme: "light",
+    style: "1",
+    locale: "es",
+    autosize: true,
+    allow_symbol_change: true,
+    enable_publishing: false,
+    hide_side_toolbar: false,
+    hide_top_toolbar: false,
+    hide_legend: false,
+    hide_volume: false
   });
-
-  cont.appendChild(script);
 }
 
 function loadTechnicalAnalysis(){
