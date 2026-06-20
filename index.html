@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi Cartera Final</title>
+<title>Mi Cartera Final PRO</title>
 
 <style>
 :root{
@@ -33,7 +33,7 @@ header{
 }
 header h1{margin:0;font-size:24px}
 header p{margin:6px 0 0;color:#bfdbfe;font-size:13px}
-.wrap{max-width:1250px;margin:0 auto;padding:12px}
+.wrap{max-width:1280px;margin:0 auto;padding:12px}
 .card{
   background:white;
   border-radius:18px;
@@ -43,6 +43,7 @@ header p{margin:6px 0 0;color:#bfdbfe;font-size:13px}
   border:1px solid rgba(148,163,184,.25);
 }
 h2{font-size:18px;margin:0 0 12px}
+h3{font-size:15px;margin:0 0 10px}
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
@@ -74,6 +75,11 @@ button.secondary{background:#475569}
 button.good{background:#059669}
 button.warn{background:#d97706}
 button.danger{background:#dc2626}
+button.smallbtn{
+  padding:7px;
+  font-size:12px;
+  border-radius:8px;
+}
 .btns{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
@@ -101,7 +107,7 @@ button.danger{background:#dc2626}
 table{
   border-collapse:collapse;
   width:100%;
-  min-width:1700px;
+  min-width:1900px;
 }
 th,td{
   padding:8px;
@@ -170,12 +176,29 @@ td input,td select{
   padding:12px;
 }
 canvas{width:100%;height:250px}
+#tvChartContainer{
+  height:560px;
+  margin-top:16px;
+  border:1px solid #dbe3ef;
+  border-radius:14px;
+  overflow:hidden;
+  background:white;
+}
+#tvTechnicalContainer{
+  min-height:450px;
+  margin-top:16px;
+  border:1px solid #dbe3ef;
+  border-radius:14px;
+  overflow:hidden;
+  background:white;
+}
 @media(max-width:760px){
   .wrap{padding:10px}
   .summary{grid-template-columns:repeat(2,minmax(0,1fr))}
   .kpi strong{font-size:17px}
-  table{min-width:1650px}
+  table{min-width:1850px}
   th,td{font-size:12px;padding:7px}
+  #tvChartContainer{height:520px}
 }
 </style>
 </head>
@@ -183,15 +206,15 @@ canvas{width:100%;height:250px}
 <body>
 
 <header>
-  <h1>📈 Mi Cartera Final</h1>
-  <p>Manual + Finnhub + Yahoo · acciones · ETF · fondos · monetarios · FX · gastos · gráficos</p>
+  <h1>📈 Mi Cartera Final PRO</h1>
+  <p>Cartera · FX · fiscalidad · Yahoo · Finnhub · TradingView · acciones · fondos · cripto</p>
 </header>
 
 <div class="wrap">
 
 <section class="card note oknote">
-  <strong>Versión final estable:</strong> si introduces precio actual manual, la app lo usa siempre.
-  Si eliges Finnhub o Yahoo, intenta traer cotización, pero si falla, puedes calcular manualmente.
+  <strong>Uso recomendado:</strong> primero usa <strong>Fuente Manual</strong> y precio actual manual.
+  Luego prueba Finnhub o Yahoo. Si Yahoo/Finnhub fallan, la app sigue funcionando con manual.
 </section>
 
 <section class="card">
@@ -202,14 +225,15 @@ canvas{width:100%;height:250px}
       <input id="apiKey" placeholder="Opcional para Finnhub">
     </div>
     <div>
-      <label>FX actual USD→EUR manual</label>
-      <input id="fxNow" placeholder="Ej. 0.92">
+      <label>FX actual USD→EUR</label>
+      <input id="fxNow" placeholder="Ej. 0,86957">
     </div>
     <div>
-      <label>Fecha de valoración</label>
+      <label>Fecha valoración</label>
       <input id="valuationDate" type="date">
     </div>
   </div>
+
   <div class="btns">
     <button onclick="saveApi()">Guardar API</button>
     <button class="secondary" onclick="clearApi()">Borrar API</button>
@@ -220,6 +244,7 @@ canvas{width:100%;height:250px}
 
 <section class="card">
   <h2>💼 Posiciones</h2>
+
   <div class="table-wrap">
     <table id="positions">
       <thead>
@@ -228,6 +253,7 @@ canvas{width:100%;height:250px}
           <th>Nombre</th>
           <th>Tipo</th>
           <th>Fuente</th>
+          <th>Símbolo TV</th>
           <th>Fecha compra</th>
           <th>Antigüedad</th>
           <th>Moneda</th>
@@ -237,7 +263,7 @@ canvas{width:100%;height:250px}
           <th>Comisión compra €</th>
           <th>Precio actual manual</th>
           <th>Comisión venta €</th>
-          <th>Dividendos / cupón €</th>
+          <th>Dividendos / cupón / staking €</th>
           <th>Ret. extranj. %</th>
           <th>Ret. España %</th>
           <th>Precio usado</th>
@@ -247,7 +273,7 @@ canvas{width:100%;height:250px}
           <th>Efecto precio €</th>
           <th>Efecto FX €</th>
           <th>Rentab.</th>
-          <th></th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -255,7 +281,7 @@ canvas{width:100%;height:250px}
   </div>
 
   <div class="btns">
-    <button onclick="addRow()">➕ Añadir</button>
+    <button onclick="addRow()">➕ Añadir posición</button>
     <button class="warn" onclick="calculateAll()">📈 Calcular / actualizar</button>
     <button class="good" onclick="exportCSV()">⬇️ Exportar CSV</button>
     <button class="secondary" onclick="exportJSON()">⬇️ Copia JSON</button>
@@ -290,7 +316,7 @@ canvas{width:100%;height:250px}
 </section>
 
 <section class="card">
-  <h2>📊 Gráficos</h2>
+  <h2>📊 Gráficos internos</h2>
   <div class="charts">
     <div class="chartbox">
       <h3>Distribución por valor</h3>
@@ -303,11 +329,53 @@ canvas{width:100%;height:250px}
   </div>
 </section>
 
+<section class="card">
+  <h2>📉 TradingView: gráfico y análisis técnico</h2>
+
+  <div class="grid">
+    <div>
+      <label>Símbolo TradingView</label>
+      <input id="tvSymbol" value="NASDAQ:NVDA" placeholder="Ej. NASDAQ:NVDA">
+    </div>
+
+    <div>
+      <label>Intervalo</label>
+      <select id="tvInterval">
+        <option value="D">Diario</option>
+        <option value="W">Semanal</option>
+        <option value="60">1 hora</option>
+        <option value="15">15 minutos</option>
+        <option value="M">Mensual</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="btns">
+    <button onclick="loadTradingViewChart()">📈 Cargar gráfico</button>
+    <button class="secondary" onclick="loadTechnicalAnalysis()">📊 Cargar análisis técnico</button>
+  </div>
+
+  <div class="note" style="margin-top:12px">
+    <strong>Ejemplos:</strong><br>
+    NVIDIA → <strong>NASDAQ:NVDA</strong><br>
+    Tesla → <strong>NASDAQ:TSLA</strong><br>
+    Apple → <strong>NASDAQ:AAPL</strong><br>
+    Microsoft → <strong>NASDAQ:MSFT</strong><br>
+    Bitcoin → <strong>BITSTAMP:BTCUSD</strong> o <strong>COINBASE:BTCUSD</strong><br>
+    Ethereum → <strong>BITSTAMP:ETHUSD</strong> o <strong>COINBASE:ETHUSD</strong><br>
+    Repsol → <strong>BME:REP</strong><br>
+    Enagás → <strong>BME:ENG</strong>
+  </div>
+
+  <div id="tvChartContainer"></div>
+  <div id="tvTechnicalContainer"></div>
+</section>
+
 <section class="card note">
-  <strong>Notas:</strong><br>
-  1. Para acciones/ETF USA usa ticker Yahoo/Finnhub tipo <strong>NVDA</strong>.<br>
-  2. Para fondos o monetarios, lo más fiable suele ser usar <strong>fuente Manual</strong> y meter valor liquidativo/precio actual manual.<br>
-  3. Yahoo desde GitHub Pages puede fallar por CORS/cookies; Finnhub suele ser más estable con API Key.<br>
+  <strong>Notas importantes:</strong><br>
+  1. Para cripto: usa tipo <strong>Cripto</strong>. BTC puede ser <strong>BTC-USD</strong> en Yahoo y <strong>BITSTAMP:BTCUSD</strong> en TradingView.<br>
+  2. Para fondos y monetarios: lo más fiable es <strong>Fuente Manual</strong> con valor liquidativo/precio actual manual.<br>
+  3. Yahoo puede fallar por CORS/cookies porque no es API oficial; Finnhub necesita API Key.<br>
   4. El cálculo fiscal es orientativo y no sustituye Renta Web.
 </section>
 
@@ -329,33 +397,52 @@ function n(v){
   if(v === undefined || v === null) return 0;
   let s = String(v).trim();
   if(!s) return 0;
-  s = s.replace(/\./g,'#').replace(',','.').replace(/#/g,'');
-  let x = parseFloat(s);
-  if(isNaN(x)){
-    s = String(v).trim().replace(',','.');
-    x = parseFloat(s);
+
+  s = s.replace(/\s/g,'');
+
+  const hasComma = s.includes(',');
+  const hasDot = s.includes('.');
+
+  if(hasComma && hasDot){
+    const lastComma = s.lastIndexOf(',');
+    const lastDot = s.lastIndexOf('.');
+    if(lastComma > lastDot){
+      s = s.replace(/\./g,'').replace(',','.');
+    } else {
+      s = s.replace(/,/g,'');
+    }
+  } else if(hasComma){
+    s = s.replace(',','.');
   }
+
+  const x = parseFloat(s);
   return isNaN(x) ? 0 : x;
 }
 
 function eur(x){
   return (x||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'});
 }
+
 function usd(x){
   return (x||0).toLocaleString('en-US',{style:'currency',currency:'USD'});
 }
+
 function pct(x){
   return ((x||0)*100).toFixed(2)+' %';
 }
+
 function cls(x){
   return x>=0?'pos':'neg';
 }
+
 function today(){
   return new Date().toISOString().slice(0,10);
 }
+
 function tax(base){
   let imp=0,prev=0,det=[];
   if(base<=0) return {imp:0,det:[]};
+
   for(const tr of TRAMOS){
     let b = Math.min(base,tr.hasta)-prev;
     if(b>0){
@@ -366,8 +453,10 @@ function tax(base){
     prev=tr.hasta;
     if(base<=tr.hasta) break;
   }
+
   return {imp,det};
 }
+
 function age(date){
   if(!date) return '-';
   let d = Math.floor((new Date($('valuationDate').value || today()) - new Date(date))/86400000);
@@ -375,10 +464,27 @@ function age(date){
   return `${Math.max(d,0)} días / ${y.toFixed(2)} años`;
 }
 
+function defaultTvSymbol(ticker,type){
+  const t = (ticker||'').toUpperCase();
+
+  if(t === 'NVDA') return 'NASDAQ:NVDA';
+  if(t === 'TSLA') return 'NASDAQ:TSLA';
+  if(t === 'AAPL') return 'NASDAQ:AAPL';
+  if(t === 'MSFT') return 'NASDAQ:MSFT';
+  if(t === 'AMZN') return 'NASDAQ:AMZN';
+  if(t === 'GOOGL') return 'NASDAQ:GOOGL';
+  if(t === 'BTC-USD' || t === 'BTC') return 'BITSTAMP:BTCUSD';
+  if(t === 'ETH-USD' || t === 'ETH') return 'BITSTAMP:ETHUSD';
+  if(t === 'REP') return 'BME:REP';
+  if(t === 'ENG') return 'BME:ENG';
+
+  return t;
+}
+
 function rowHTML(d={}){
   return `
 <tr>
-<td class="ticker"><input value="${d.ticker||''}" placeholder="NVDA / ISIN"></td>
+<td class="ticker"><input value="${d.ticker||''}" placeholder="NVDA / BTC-USD / ISIN"></td>
 <td><input value="${d.name||''}" placeholder="Nombre"></td>
 <td>
 <select>
@@ -386,6 +492,7 @@ function rowHTML(d={}){
 <option ${d.type==='ETF'?'selected':''}>ETF</option>
 <option ${d.type==='Fondo'?'selected':''}>Fondo</option>
 <option ${d.type==='Monetario'?'selected':''}>Monetario</option>
+<option ${d.type==='Cripto'?'selected':''}>Cripto</option>
 <option ${d.type==='Cash'?'selected':''}>Cash</option>
 </select>
 </td>
@@ -396,6 +503,7 @@ function rowHTML(d={}){
 <option ${d.source==='Yahoo'?'selected':''}>Yahoo</option>
 </select>
 </td>
+<td><input value="${d.tvSymbol||''}" placeholder="NASDAQ:NVDA"></td>
 <td><input type="date" value="${d.buyDate||''}"></td>
 <td class="muted">-</td>
 <td>
@@ -408,7 +516,7 @@ function rowHTML(d={}){
 <td><input value="${d.units||''}"></td>
 <td><input value="${d.fxBuy||''}" placeholder="1 si EUR"></td>
 <td><input value="${d.buyFee??0}"></td>
-<td><input value="${d.manualPrice||''}" placeholder="Si manual"></td>
+<td><input value="${d.manualPrice||''}"></td>
 <td><input value="${d.sellFee??0}"></td>
 <td><input value="${d.divGross??0}"></td>
 <td><input value="${d.foreignPct??(d.currency==='USD'?15:0)}"></td>
@@ -420,7 +528,10 @@ function rowHTML(d={}){
 <td class="muted">-</td>
 <td class="muted">-</td>
 <td class="muted">-</td>
-<td><button class="danger" onclick="this.closest('tr').remove(); calculateAll(); saveAll(false)">X</button></td>
+<td>
+  <button class="smallbtn secondary" onclick="loadTvFromRow(this)">TV</button>
+  <button class="smallbtn danger" onclick="this.closest('tr').remove(); calculateAll(); saveAll(false)">X</button>
+</td>
 </tr>`;
 }
 
@@ -437,17 +548,18 @@ function rows(){
       name:c[1].querySelector('input').value,
       type:c[2].querySelector('select').value,
       source:c[3].querySelector('select').value,
-      buyDate:c[4].querySelector('input').value,
-      currency:c[6].querySelector('select').value,
-      buy:n(c[7].querySelector('input').value),
-      units:n(c[8].querySelector('input').value),
-      fxBuy:n(c[9].querySelector('input').value),
-      buyFee:n(c[10].querySelector('input').value),
-      manualPrice:n(c[11].querySelector('input').value),
-      sellFee:n(c[12].querySelector('input').value),
-      divGross:n(c[13].querySelector('input').value),
-      foreignPct:n(c[14].querySelector('input').value),
-      spainPct:n(c[15].querySelector('input').value),
+      tvSymbol:c[4].querySelector('input').value.trim(),
+      buyDate:c[5].querySelector('input').value,
+      currency:c[7].querySelector('select').value,
+      buy:n(c[8].querySelector('input').value),
+      units:n(c[9].querySelector('input').value),
+      fxBuy:n(c[10].querySelector('input').value),
+      buyFee:n(c[11].querySelector('input').value),
+      manualPrice:n(c[12].querySelector('input').value),
+      sellFee:n(c[13].querySelector('input').value),
+      divGross:n(c[14].querySelector('input').value),
+      foreignPct:n(c[15].querySelector('input').value),
+      spainPct:n(c[16].querySelector('input').value),
       _tr:r
     }
   });
@@ -461,9 +573,11 @@ function setCell(r,i,html,cl=''){
 async function getFinnhub(ticker){
   const key=$('apiKey').value.trim();
   if(!key) throw new Error('Falta API Finnhub');
+
   const url=`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(ticker)}&token=${encodeURIComponent(key)}`;
   const res=await fetch(url);
   const data=await res.json();
+
   if(!data || !data.c) throw new Error('Finnhub no devolvió precio');
   return data.c;
 }
@@ -472,8 +586,10 @@ async function getYahoo(ticker){
   const url=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=1d`;
   const res=await fetch(url);
   const data=await res.json();
+
   const result=data?.chart?.result?.[0];
   const price=result?.meta?.regularMarketPrice;
+
   if(!price) throw new Error('Yahoo no devolvió precio');
   return price;
 }
@@ -488,14 +604,10 @@ async function calculateAll(){
   let alloc=[];
 
   for(const d of data){
-    setCell(d._tr,5,age(d.buyDate),'muted');
+    setCell(d._tr,6,age(d.buyDate),'muted');
 
-    if(!d.ticker && d.type!=='Cash'){
-      debug.push('Fila sin ticker/ISIN.');
-      continue;
-    }
     if(!d.buy || !d.units){
-      debug.push(`${d.ticker||d.name}: faltan precio compra o unidades.`);
+      debug.push(`${d.ticker||d.name||'(sin nombre)'}: faltan precio compra o unidades.`);
       continue;
     }
 
@@ -506,6 +618,7 @@ async function calculateAll(){
       debug.push(`${d.ticker}: falta FX compra.`);
       continue;
     }
+
     if(d.currency==='USD' && !localFxNow){
       debug.push(`${d.ticker}: falta FX actual.`);
       continue;
@@ -552,13 +665,13 @@ async function calculateAll(){
 
     alloc.push({ticker:d.ticker||d.name,value,gain});
 
-    setCell(d._tr,16,d.currency==='USD'?usd(price):eur(price));
-    setCell(d._tr,17,eur(value));
-    setCell(d._tr,18,eur(cost));
-    setCell(d._tr,19,eur(gain),cls(gain));
-    setCell(d._tr,20,eur(priceEffect),cls(priceEffect));
-    setCell(d._tr,21,eur(fxEffect),cls(fxEffect));
-    setCell(d._tr,22,pct(ret),cls(ret));
+    setCell(d._tr,17,d.currency==='USD'?usd(price):eur(price));
+    setCell(d._tr,18,eur(value));
+    setCell(d._tr,19,eur(cost));
+    setCell(d._tr,20,eur(gain),cls(gain));
+    setCell(d._tr,21,eur(priceEffect),cls(priceEffect));
+    setCell(d._tr,22,eur(fxEffect),cls(fxEffect));
+    setCell(d._tr,23,pct(ret),cls(ret));
   }
 
   const base = Math.max(
@@ -579,7 +692,7 @@ async function calculateAll(){
 <div class="kpi"><small>Rentabilidad</small><strong class="${cls(totalGain)}">${totalCost?pct(totalGain/totalCost):'0,00 %'}</strong></div>
 <div class="kpi"><small>Efecto precio</small><strong class="${cls(totalPriceEffect)}">${eur(totalPriceEffect)}</strong></div>
 <div class="kpi"><small>Efecto FX</small><strong class="${cls(totalFxEffect)}">${eur(totalFxEffect)}</strong></div>
-<div class="kpi"><small>Dividendos brutos</small><strong>${eur(div)}</strong></div>
+<div class="kpi"><small>Dividendos / cupones</small><strong>${eur(div)}</strong></div>
 <div class="kpi"><small>Dividendos netos estimados</small><strong>${eur(divNet)}</strong></div>
 <div class="kpi"><small>Base ahorro estimada</small><strong>${eur(base)}</strong></div>
 <div class="kpi"><small>IRPF estimado</small><strong>${eur(tx.imp)}</strong></div>
@@ -605,10 +718,13 @@ function drawCharts(items){
 function drawPie(items){
   const c=$('pieChart'),ctx=c.getContext('2d');
   ctx.clearRect(0,0,c.width,c.height);
+
   const total=items.reduce((s,x)=>s+Math.max(x.value,0),0);
   if(!total){ctx.fillText('Sin datos',20,30);return;}
+
   let a=-Math.PI/2;
   const colors=['#2563eb','#10b981','#f97316','#8b5cf6','#ef4444','#14b8a6','#eab308'];
+
   items.forEach((it,i)=>{
     let slice=Math.max(it.value,0)/total*Math.PI*2;
     ctx.beginPath();
@@ -626,16 +742,22 @@ function drawPie(items){
 function drawBars(items){
   const c=$('barChart'),ctx=c.getContext('2d');
   ctx.clearRect(0,0,c.width,c.height);
+
   if(!items.length){ctx.fillText('Sin datos',20,30);return;}
+
   const max=Math.max(...items.map(x=>Math.abs(x.gain)),1);
+
   items.forEach((it,i)=>{
     const x=40+i*55;
     const h=Math.abs(it.gain)/max*95;
+
     ctx.fillStyle=it.gain>=0?'#059669':'#dc2626';
     ctx.fillRect(x,135-(it.gain>=0?h:0),35,h);
+
     ctx.fillStyle='#111827';
     ctx.fillText(it.ticker,x,250);
   });
+
   ctx.strokeStyle='#94a3b8';
   ctx.beginPath();
   ctx.moveTo(20,135);
@@ -643,14 +765,103 @@ function drawBars(items){
   ctx.stroke();
 }
 
+function loadTvFromRow(btn){
+  const r = btn.closest('tr');
+  const d = rows().find(x=>x._tr===r);
+
+  let symbol = d.tvSymbol || defaultTvSymbol(d.ticker,d.type);
+  $('tvSymbol').value = symbol;
+
+  loadTradingViewChart();
+  setTimeout(()=>loadTechnicalAnalysis(),500);
+
+  document.getElementById('tvChartContainer').scrollIntoView({behavior:'smooth'});
+}
+
+function loadTradingViewChart(){
+  const symbol = $('tvSymbol').value || 'NASDAQ:NVDA';
+  const interval = $('tvInterval').value || 'D';
+
+  const cont = $('tvChartContainer');
+  cont.innerHTML = '';
+
+  const widgetDiv = document.createElement('div');
+  widgetDiv.className = 'tradingview-widget-container__widget';
+  widgetDiv.style.height = '100%';
+  widgetDiv.style.width = '100%';
+  cont.appendChild(widgetDiv);
+
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+  script.async = true;
+
+  script.innerHTML = JSON.stringify({
+    autosize:true,
+    symbol:symbol,
+    interval:interval,
+    timezone:'Europe/Madrid',
+    theme:'light',
+    style:'1',
+    locale:'es',
+    enable_publishing:false,
+    allow_symbol_change:true,
+    hide_side_toolbar:false,
+    hide_top_toolbar:false,
+    hide_legend:false,
+    hide_volume:false,
+    calendar:false,
+    support_host:'https://www.tradingview.com',
+    studies:[
+      'MASimple@tv-basicstudies',
+      'RSI@tv-basicstudies',
+      'MACD@tv-basicstudies'
+    ]
+  });
+
+  cont.appendChild(script);
+}
+
+function loadTechnicalAnalysis(){
+  const symbol = $('tvSymbol').value || 'NASDAQ:NVDA';
+
+  const cont = $('tvTechnicalContainer');
+  cont.innerHTML = '';
+
+  const widgetDiv = document.createElement('div');
+  widgetDiv.className = 'tradingview-widget-container__widget';
+  cont.appendChild(widgetDiv);
+
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js';
+  script.async = true;
+
+  script.innerHTML = JSON.stringify({
+    interval:'1D',
+    width:'100%',
+    height:450,
+    symbol:symbol,
+    showIntervalTabs:true,
+    isTransparent:false,
+    displayMode:'single',
+    locale:'es',
+    colorTheme:'light'
+  });
+
+  cont.appendChild(script);
+}
+
 function saveApi(){
   localStorage.setItem('finnhub_api_key',$('apiKey').value.trim());
   alert('API guardada.');
 }
+
 function clearApi(){
   localStorage.removeItem('finnhub_api_key');
   $('apiKey').value='';
 }
+
 function saveAll(show=true){
   const data={
     api:$('apiKey').value,
@@ -661,15 +872,19 @@ function saveAll(show=true){
     custody:$('custody').value,
     positions:rows().map(({_tr,...x})=>x)
   };
-  localStorage.setItem('cartera_final',JSON.stringify(data));
+
+  localStorage.setItem('cartera_final_pro',JSON.stringify(data));
+
   if(show) alert('Cartera guardada.');
 }
+
 function loadAll(show=false){
   $('valuationDate').value = $('valuationDate').value || today();
+
   const api=localStorage.getItem('finnhub_api_key');
   if(api) $('apiKey').value=api;
 
-  const raw=localStorage.getItem('cartera_final');
+  const raw=localStorage.getItem('cartera_final_pro');
   TB().innerHTML='';
 
   if(!raw){
@@ -678,7 +893,12 @@ function loadAll(show=false){
       name:'NVIDIA',
       type:'Acción',
       source:'Manual',
+      tvSymbol:'NASDAQ:NVDA',
       currency:'USD',
+      buy:'25,999',
+      units:'450',
+      fxBuy:'0,8825',
+      manualPrice:'210,69',
       foreignPct:15,
       spainPct:19,
       buyFee:0,
@@ -690,13 +910,19 @@ function loadAll(show=false){
   }
 
   const d=JSON.parse(raw);
+
   ['fxNow','valuationDate','otherGains','losses','custody'].forEach(id=>{
     if(d[id]!==undefined) $(id).value=d[id];
   });
+
   if(d.api && !api) $('apiKey').value=d.api;
+
   (d.positions||[]).forEach(addRow);
+
   if(!(d.positions||[]).length) addRow();
+
   calculateAll();
+
   if(show) alert('Cartera cargada.');
 }
 
@@ -708,25 +934,31 @@ function clearPortfolio(){
     saveAll(false);
   }
 }
+
 function exportCSV(){
   const header=[
-    'Ticker','Nombre','Tipo','Fuente','Fecha compra','Moneda','Precio compra','Unidades',
+    'Ticker','Nombre','Tipo','Fuente','TradingView','Fecha compra','Moneda','Precio compra','Unidades',
     'FX compra','Comision compra EUR','Precio actual manual','Comision venta EUR',
-    'Dividendos brutos EUR','Ret extranj %','Ret Espana %'
+    'Dividendos EUR','Ret extranj %','Ret España %'
   ];
+
   const lines=[header.join(';')];
+
   rows().forEach(d=>{
     lines.push([
-      d.ticker,d.name,d.type,d.source,d.buyDate,d.currency,d.buy,d.units,d.fxBuy,d.buyFee,
+      d.ticker,d.name,d.type,d.source,d.tvSymbol,d.buyDate,d.currency,d.buy,d.units,d.fxBuy,d.buyFee,
       d.manualPrice,d.sellFee,d.divGross,d.foreignPct,d.spainPct
     ].join(';'));
   });
-  download('mi_cartera_final.csv',lines.join('\n'),'text/csv;charset=utf-8');
+
+  download('mi_cartera_final_pro.csv',lines.join('\n'),'text/csv;charset=utf-8');
 }
+
 function exportJSON(){
   saveAll(false);
-  download('mi_cartera_final_backup.json',localStorage.getItem('cartera_final')||'{}','application/json');
+  download('mi_cartera_final_pro_backup.json',localStorage.getItem('cartera_final_pro')||'{}','application/json');
 }
+
 function download(name,content,type){
   const blob=new Blob([content],{type});
   const url=URL.createObjectURL(blob);
@@ -736,15 +968,18 @@ function download(name,content,type){
   a.click();
   URL.revokeObjectURL(url);
 }
+
 function toggleDebug(){
   const d=$('debug');
   d.style.display = d.style.display==='block' ? 'none' : 'block';
 }
+
 function attachAutoSave(){
   document.querySelectorAll('input,select').forEach(el=>{
     el.onchange=()=>saveAll(false);
   });
 }
+
 ['otherGains','losses','custody','valuationDate','fxNow'].forEach(id=>{
   $(id).addEventListener('input',()=>saveAll(false));
 });
@@ -752,140 +987,6 @@ function attachAutoSave(){
 loadAll(false);
 attachAutoSave();
 </script>
-<!-- ========================================================= -->
-<!-- BLOQUE NUEVO: GRÁFICOS Y ANÁLISIS TÉCNICO TRADINGVIEW -->
-<!-- Pegar justo antes de </body> -->
-<!-- ========================================================= -->
 
-<section class="card">
-  <h2>📉 Gráfico y análisis técnico</h2>
-
-  <div class="grid">
-    <div>
-      <label>Símbolo TradingView</label>
-      <input id="tvSymbol" value="NASDAQ:NVDA" placeholder="Ej. NASDAQ:NVDA">
-    </div>
-
-    <div>
-      <label>Intervalo</label>
-      <select id="tvInterval">
-        <option value="D">Diario</option>
-        <option value="W">Semanal</option>
-        <option value="60">1 hora</option>
-        <option value="15">15 minutos</option>
-        <option value="M">Mensual</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="btns">
-    <button onclick="tvCargarGrafico()">📈 Cargar gráfico</button>
-    <button class="secondary" onclick="tvCargarAnalisis()">📊 Cargar análisis técnico</button>
-  </div>
-
-  <div class="note" style="margin-top:12px">
-    <strong>Ejemplos de símbolos:</strong>
-    <br>NVDA → <strong>NASDAQ:NVDA</strong>
-    <br>Apple → <strong>NASDAQ:AAPL</strong>
-    <br>Tesla → <strong>NASDAQ:TSLA</strong>
-    <br>Microsoft → <strong>NASDAQ:MSFT</strong>
-    <br>Bitcoin → <strong>BITSTAMP:BTCUSD</strong> o <strong>COINBASE:BTCUSD</strong>
-    <br>Ethereum → <strong>BITSTAMP:ETHUSD</strong> o <strong>COINBASE:ETHUSD</strong>
-    <br>Repsol → prueba <strong>BME:REP</strong>
-    <br>Enagás → prueba <strong>BME:ENG</strong>
-  </div>
-
-  <div
-    id="tvChartContainer"
-    style="height:560px;margin-top:16px;border:1px solid #dbe3ef;border-radius:14px;overflow:hidden;background:white">
-  </div>
-
-  <div
-    id="tvTechnicalContainer"
-    style="margin-top:16px;border:1px solid #dbe3ef;border-radius:14px;overflow:hidden;background:white">
-  </div>
-</section>
-
-<script>
-function tvLimpiarContenedor(id){
-  const cont = document.getElementById(id);
-  cont.innerHTML = "";
-  return cont;
-}
-
-function tvCargarGrafico(){
-  const symbol = document.getElementById("tvSymbol").value || "NASDAQ:NVDA";
-  const interval = document.getElementById("tvInterval").value || "D";
-
-  const cont = tvLimpiarContenedor("tvChartContainer");
-
-  const widgetDiv = document.createElement("div");
-  widgetDiv.className = "tradingview-widget-container__widget";
-  widgetDiv.style.height = "100%";
-  widgetDiv.style.width = "100%";
-
-  cont.appendChild(widgetDiv);
-
-  const script = document.createElement("script");
-  script.type = "text/javascript";
-  script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-  script.async = true;
-
-  script.innerHTML = JSON.stringify({
-    "autosize": true,
-    "symbol": symbol,
-    "interval": interval,
-    "timezone": "Europe/Madrid",
-    "theme": "light",
-    "style": "1",
-    "locale": "es",
-    "enable_publishing": false,
-    "allow_symbol_change": true,
-    "hide_side_toolbar": false,
-    "hide_top_toolbar": false,
-    "hide_legend": false,
-    "hide_volume": false,
-    "calendar": false,
-    "support_host": "https://www.tradingview.com",
-    "studies": [
-      "MASimple@tv-basicstudies",
-      "RSI@tv-basicstudies",
-      "MACD@tv-basicstudies"
-    ]
-  });
-
-  cont.appendChild(script);
-}
-
-function tvCargarAnalisis(){
-  const symbol = document.getElementById("tvSymbol").value || "NASDAQ:NVDA";
-
-  const cont = tvLimpiarContenedor("tvTechnicalContainer");
-
-  const widgetDiv = document.createElement("div");
-  widgetDiv.className = "tradingview-widget-container__widget";
-
-  cont.appendChild(widgetDiv);
-
-  const script = document.createElement("script");
-  script.type = "text/javascript";
-  script.src = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js";
-  script.async = true;
-
-  script.innerHTML = JSON.stringify({
-    "interval": "1D",
-    "width": "100%",
-    "height": 450,
-    "symbol": symbol,
-    "showIntervalTabs": true,
-    "isTransparent": false,
-    "displayMode": "single",
-    "locale": "es",
-    "colorTheme": "light"
-  });
-
-  cont.appendChild(script);
-}
-</script>
 </body>
 </html>
