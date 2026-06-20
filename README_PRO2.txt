@@ -1,0 +1,1 @@
+Mi Cartera Pro2: sube index.html, manifest.json, icon-192.png e icon-512.png a tu repo GitHub Pages. Reemplaza los anteriores y haz Commit changes. Abre la URL en Safari, refresca y añade a pantalla de inicio.
