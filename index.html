@@ -1,59 +1,115 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#071428" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Cartera Pro2" />
-<title>Mi Cartera Pro2</title>
-<link rel="manifest" href="manifest.json" />
-<link rel="icon" href="icon-192.png" />
-<link rel="apple-touch-icon" href="icon-192.png" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Cartera Pro (FIX)</title>
+
 <style>
-:root{--bg:#eef2f7;--card:#fff;--ink:#0f172a;--muted:#64748b;--line:#dbe3ef;--blue:#2563eb;--blue2:#1d4ed8;--green:#059669;--red:#dc2626;--amber:#d97706;--soft:#f8fafc;--dark:#071428}
-*{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink)}
-header{background:linear-gradient(135deg,#020617,#172554,#1e40af);color:white;padding:26px 18px 24px;text-align:center} header h1{margin:0;font-size:24px} header p{margin:7px 0 0;color:#bfdbfe;font-size:13px}
-.wrap{max-width:1280px;margin:0 auto;padding:14px}.card{background:var(--card);border:1px solid rgba(148,163,184,.28);border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:0 8px 24px rgba(15,23,42,.07)}
-h2{font-size:18px;margin:0 0 13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.field label{display:block;font-size:12px;color:#334155;font-weight:800;margin:0 0 5px}input,select,button{width:100%;padding:10px;border:1px solid var(--line);border-radius:11px;font-size:15px;background:#fff}button{border:none;background:var(--blue);color:white;font-weight:850;cursor:pointer}button:hover{background:var(--blue2)}button.secondary{background:#475569}button.good{background:#059669}button.warn{background:#d97706}button.danger{background:#dc2626}.btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px}.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px}.kpi{background:var(--soft);border:1px solid var(--line);border-radius:15px;padding:13px}.kpi small{display:block;color:var(--muted);font-weight:800;font-size:12px}.kpi strong{display:block;font-size:20px;margin-top:5px}.pos{color:var(--green)!important;font-weight:900}.neg{color:var(--red)!important;font-weight:900}.muted{color:var(--muted);font-size:12px}.note{background:#fffbeb;border-left:5px solid #f59e0b;border-radius:12px;padding:12px;line-height:1.45;font-size:13px}.oknote{background:#ecfdf5;border-left-color:#10b981}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:white}table{border-collapse:collapse;width:100%;min-width:1450px}th,td{padding:8px;border-bottom:1px solid var(--line);font-size:13px;text-align:right;vertical-align:middle}th:first-child,td:first-child{text-align:left}th{background:#f8fafc;color:#334155;position:sticky;top:0;z-index:1}td input,td select{min-width:86px;padding:8px;font-size:13px}.ticker input{text-transform:uppercase;font-weight:900;min-width:75px}.actions button{padding:7px;border-radius:9px;font-size:12px}.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.chartbox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}canvas{width:100%;height:260px}.small{font-size:12px;color:var(--muted)}
-@media(max-width:760px){.wrap{padding:10px}.card{padding:13px;border-radius:16px}header h1{font-size:22px}.summary{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi strong{font-size:17px}table{min-width:1380px}th,td{font-size:12px;padding:7px}canvas{height:230px}}
+body{
+  font-family:Arial;
+  background:#f5f7fa;
+  padding:20px;
+}
+h2{
+  color:#1e3a8a;
+}
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom:20px;
+}
+input{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+button{
+  padding:12px;
+  width:100%;
+  border:none;
+  border-radius:8px;
+  background:#2563eb;
+  color:white;
+  font-weight:bold;
+}
+.result{
+  font-size:18px;
+  margin-top:10px;
+}
+.pos{color:green;font-weight:bold}
+.neg{color:red;font-weight:bold}
 </style>
+
 </head>
+
 <body>
-<header><h1>📈 Mi Cartera Pro2</h1><p>Fecha de compra · antigüedad · precio manual/API · gráficos · dividendos · IRPF estimado</p></header>
-<div class="wrap">
-<section class="card note oknote"><strong>Pro2:</strong> si introduces <strong>Precio actual manual</strong>, la app lo usa siempre antes que la API. En móvil, desplaza la tabla horizontalmente.</section>
-<section class="card"><h2>🔑 Configuración</h2><div class="grid"><div class="field"><label>API Key Finnhub</label><input id="apiKey" placeholder="Pega aquí tu API Key"></div><div class="field"><label>FX actual USD→EUR manual opcional</label><input id="manualFx" type="number" step="0.000001" placeholder="Vacío = Finnhub"></div><div class="field"><label>Fecha de venta/simulación</label><input id="valuationDate" type="date"></div><div class="field"><label>Año fiscal</label><select id="taxYear"><option selected>2026</option><option>2025</option></select></div></div><div class="btns"><button onclick="saveApi()">Guardar API</button><button class="secondary" onclick="clearApi()">Borrar API</button><button class="good" onclick="saveAll()">Guardar cartera</button><button class="secondary" onclick="loadAll(true)">Cargar cartera</button></div><p class="small">Tus datos se guardan en localStorage del navegador. Haz copia de seguridad JSON si vas a cambiar de móvil o navegador.</p></section>
-<section class="card"><h2>💼 Posiciones</h2><div class="table-wrap"><table id="positions"><thead><tr><th>Ticker</th><th>Notas</th><th>Fecha compra</th><th>Antig.</th><th>Moneda</th><th>Precio compra</th><th>Acciones</th><th>FX compra</th><th>Comisión compra €</th><th>Precio actual manual</th><th>Comisión venta €</th><th>Dividendos brutos €</th><th>Ret. extranj. %</th><th>Ret. España %</th><th>Precio actual</th><th>Valor €</th><th>Gan/Pérd €</th><th>Rentab.</th><th></th></tr></thead><tbody></tbody></table></div><div class="btns"><button onclick="addRow()">➕ Añadir posición</button><button class="warn" onclick="updateAll()">📈 Actualizar precios y calcular</button><button class="good" onclick="exportCSV()">⬇️ Exportar CSV</button><button class="secondary" onclick="exportJSON()">⬇️ Copia seguridad</button><button class="secondary" onclick="importJSONPrompt()">⬆️ Restaurar JSON</button><button class="danger" onclick="clearPortfolio()">🗑️ Vaciar</button></div></section>
-<section class="card"><h2>🧾 Ajustes fiscales globales</h2><div class="grid"><div class="field"><label>Otras plusvalías realizadas (€)</label><input id="otherGains" type="number" step="0.01" value="0"></div><div class="field"><label>Minusvalías realizadas/pendientes (€)</label><input id="losses" type="number" step="0.01" value="0"></div><div class="field"><label>Gastos custodia/administración (€)</label><input id="custody" type="number" step="0.01" value="0"></div></div></section>
-<section class="card"><h2>📌 Resumen</h2><div id="kpis" class="summary"></div><div id="taxDetail" style="margin-top:14px"></div></section>
-<section class="card"><h2>📊 Gráficos</h2><div class="charts"><div class="chartbox"><h3>Distribución por valor</h3><canvas id="pieChart" width="420" height="280"></canvas></div><div class="chartbox"><h3>Rentabilidad por posición</h3><canvas id="barChart" width="420" height="280"></canvas></div><div class="chartbox"><h3>Evolución guardada</h3><canvas id="lineChart" width="420" height="280"></canvas><button class="secondary" onclick="clearHistory()">Borrar histórico</button></div></div></section>
-<section class="card note"><strong>Notas:</strong><br>1) La fecha de compra se usa para calcular antigüedad informativa: &lt; 2 años / ≥ 2 años.<br>2) El cálculo IRPF es orientativo y usa tramos de base del ahorro parametrizados; revisa normativa antes de declarar.<br>3) No aplica FIFO multi-lote; Pro2 asume una compra por posición, tal como has pedido.<br>4) Si hay precio manual, Pro2 usa ese precio y no depende de Finnhub para esa posición.</section>
+
+<h2>📈 Mi Cartera (VERSIÓN QUE FUNCIONA)</h2>
+
+<div class="card">
+
+<label>Precio compra</label>
+<input id="buy">
+
+<label>Acciones</label>
+<input id="shares">
+
+<label>Precio actual</label>
+<input id="price">
+
+<label>FX (si USD → ej 0.92)</label>
+<input id="fx" value="1">
+
+<button onclick="calcular()">CALCULAR</button>
+
 </div>
+
+<div class="card">
+
+<h3>📊 Resultado</h3>
+
+<div class="result" id="valor"></div>
+<div class="result" id="ganancia"></div>
+<div class="result" id="rentabilidad"></div>
+
+</div>
+
 <script>
-const TRAMOS=[{hasta:6000,tipo:.19},{hasta:50000,tipo:.21},{hasta:200000,tipo:.23},{hasta:300000,tipo:.27},{hasta:Infinity,tipo:.30}];
-const $=id=>document.getElementById(id), tbody=()=>$('positions').querySelector('tbody');
-function num(v){return parseFloat(String(v??'').replace(',','.'))||0}function eur(x){return(x||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}function usd(x){return(x||0).toLocaleString('en-US',{style:'currency',currency:'USD'})}function pct(x){return((x||0)*100).toFixed(2)+' %'}function klass(x){return x>=0?'pos':'neg'}
-function todayISO(){return new Date().toISOString().slice(0,10)}
-function tax(base){let imp=0,prev=0,det=[];if(base<=0)return{imp:0,med:0,det:[]};for(const tr of TRAMOS){const b=Math.min(base,tr.hasta)-prev;if(b>0){const cuota=b*tr.tipo;imp+=cuota;det.push({desde:prev,hasta:tr.hasta,base:b,tipo:tr.tipo,cuota})}prev=tr.hasta;if(base<=tr.hasta)break}return{imp,med:imp/base,det}}
-function ageInfo(dateStr){if(!dateStr)return{txt:'-',years:0,days:0,tag:'Sin fecha'};const end=new Date($('valuationDate').value||todayISO()), start=new Date(dateStr);const days=Math.floor((end-start)/(1000*60*60*24));const years=days/365.25;return{txt:(days>=0?days:0)+' días / '+Math.max(years,0).toFixed(2)+' años',years,days,tag:years>=2?'≥ 2 años':'< 2 años'}}
-function rowHTML(d={}){return`<tr><td class="ticker"><input value="${d.ticker||''}" placeholder="NVDA"></td><td><input value="${d.note||''}" placeholder="Notas"></td><td><input type="date" value="${d.buyDate||''}"></td><td class="muted age">-</td><td><select><option ${d.currency==='USD'?'selected':''}>USD</option><option ${d.currency==='EUR'?'selected':''}>EUR</option></select></td><td><input type="number" step="0.0001" value="${d.buy||''}"></td><td><input type="number" step="0.000001" value="${d.shares||''}"></td><td><input type="number" step="0.000001" value="${d.fxBuy||''}" placeholder="1 si EUR"></td><td><input type="number" step="0.01" value="${d.buyFee??0}"></td><td><input type="number" step="0.0001" value="${d.manualPrice||''}" placeholder="Opcional"></td><td><input type="number" step="0.01" value="${d.sellFee??0}"></td><td><input type="number" step="0.01" value="${d.divGross??0}"></td><td><input type="number" step="0.01" value="${d.foreignPct??(d.currency==='USD'?15:0)}"></td><td><input type="number" step="0.01" value="${d.spainPct??19}"></td><td class="muted">-</td><td class="muted">-</td><td class="muted">-</td><td class="muted">-</td><td class="actions"><button class="danger" onclick="this.closest('tr').remove();calcTotals();saveAll(false)">X</button></td></tr>`}
-function addRow(d){tbody().insertAdjacentHTML('beforeend',rowHTML(d)); attachInputs();}
-function rows(){return[...tbody().rows].map(r=>{const c=r.cells;return{ticker:c[0].querySelector('input').value.trim().toUpperCase(),note:c[1].querySelector('input').value,buyDate:c[2].querySelector('input').value,currency:c[4].querySelector('select').value,buy:num(c[5].querySelector('input').value),shares:num(c[6].querySelector('input').value),fxBuy:num(c[7].querySelector('input').value),buyFee:num(c[8].querySelector('input').value),manualPrice:num(c[9].querySelector('input').value),sellFee:num(c[10].querySelector('input').value),divGross:num(c[11].querySelector('input').value),foreignPct:num(c[12].querySelector('input').value),spainPct:num(c[13].querySelector('input').value),_tr:r}})}
-function setCell(r,i,html,cl=''){r.cells[i].innerHTML=html;r.cells[i].className=cl}async function quote(t,key){const res=await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(t)}&token=${encodeURIComponent(key)}`);const d=await res.json();if(!d||d.c===undefined||d.c===0)throw new Error('No se pudo obtener precio para '+t);return d.c}async function fx(key){const m=num($('manualFx').value);if(m>0)return m;const res=await fetch(`https://finnhub.io/api/v1/forex/rates?base=USD&token=${encodeURIComponent(key)}`);const d=await res.json();if(!d||!d.quote||!d.quote.EUR)throw new Error('No se pudo obtener FX USD/EUR');return d.quote.EUR}
-async function updateAll(){const key=$('apiKey').value.trim();const data=rows();const needsFx=data.some(x=>x.currency==='USD');const needsApi=data.some(x=>x.currency==='USD'&&!x.manualPrice);if((needsFx&&!$('manualFx').value)||needsApi){if(!key)return alert('Introduce API Finnhub o usa FX/precio actual manual.')}let fxNow=needsFx?await fx(key):1;for(const d of data){if(!d.ticker||!d.buy||!d.shares)continue;const a=ageInfo(d.buyDate);setCell(d._tr,3,a.txt+' · '+a.tag,'muted');let price=d.manualPrice;if(!price&&d.currency==='USD')price=await quote(d.ticker,key);if(!price&&d.currency==='EUR')price=d.buy;const cost=d.currency==='USD'?(d.buy*d.shares*d.fxBuy+d.buyFee):(d.buy*d.shares+d.buyFee);const valueGross=d.currency==='USD'?(price*d.shares*fxNow):(price*d.shares);const value=valueGross-d.sellFee;const gain=value-cost;const ret=cost?gain/cost:0;setCell(d._tr,14,d.currency==='USD'?usd(price):eur(price));setCell(d._tr,15,eur(value));setCell(d._tr,16,eur(gain),klass(gain));setCell(d._tr,17,pct(ret),klass(ret));}calcTotals();saveSnapshot();saveAll(false)}
-function parseEuro(t){const clean=String(t||'').replace(/[^0-9,.-]/g,'').replace(/\./g,'').replace(',','.');return parseFloat(clean)}
-function calcTotals(){const data=rows();let cost=0,val=0,gain=0,div=0,foreign=0,spain=0,lt2=0,ge2=0;const alloc=[];for(const d of data){cost+=d.currency==='USD'?(d.buy*d.shares*d.fxBuy+d.buyFee):(d.buy*d.shares+d.buyFee);const v=parseEuro(d._tr.cells[15].textContent);if(!isNaN(v)){val+=v;alloc.push({ticker:d.ticker,value:v})}const g=parseEuro(d._tr.cells[16].textContent);if(!isNaN(g))gain+=g;div+=d.divGross;foreign+=d.divGross*(d.foreignPct/100);spain+=d.divGross*(d.spainPct/100);const a=ageInfo(d.buyDate);if(a.years>=2)ge2+=Math.max(g||0,0);else lt2+=Math.max(g||0,0)}const base=Math.max(Math.max(gain,0)+num($('otherGains').value)+div-num($('losses').value)-num($('custody').value),0);const tx=tax(base);const divTax=base>0&&div>0?tx.imp*(div/base):0;const credit=Math.min(foreign,divTax);const extraDiv=Math.max(divTax-spain-credit,0);const divNet=div-foreign-spain-extraDiv;const gainTax=base>0&&gain>0?tx.imp*(Math.max(gain,0)/base):0;const net=gain-gainTax;$('kpis').innerHTML=`<div class="kpi"><small>Valor cartera</small><strong>${eur(val)}</strong></div><div class="kpi"><small>Coste total</small><strong>${eur(cost)}</strong></div><div class="kpi"><small>Ganancia latente</small><strong class="${klass(gain)}">${eur(gain)}</strong></div><div class="kpi"><small>Rentabilidad</small><strong class="${klass(gain)}">${cost?pct(gain/cost):'0,00 %'}</strong></div><div class="kpi"><small>Ganancia &lt; 2 años</small><strong>${eur(lt2)}</strong></div><div class="kpi"><small>Ganancia ≥ 2 años</small><strong>${eur(ge2)}</strong></div><div class="kpi"><small>Dividendos brutos</small><strong>${eur(div)}</strong></div><div class="kpi"><small>Dividendos netos estimados</small><strong>${eur(divNet)}</strong></div><div class="kpi"><small>Base ahorro estimada</small><strong>${eur(base)}</strong></div><div class="kpi"><small>IRPF estimado</small><strong>${eur(tx.imp)}</strong></div><div class="kpi"><small>Ganancia tras IRPF aprox.</small><strong class="${klass(net)}">${eur(net)}</strong></div>`;let detail='';if(tx.det.length){detail='<h2>Detalle IRPF por tramos</h2><div class="table-wrap"><table style="min-width:650px"><tr><th>Tramo</th><th>Base</th><th>Tipo</th><th>Cuota</th></tr>';tx.det.forEach(x=>detail+=`<tr><td>${eur(x.desde)} - ${x.hasta===Infinity?'En adelante':eur(x.hasta)}</td><td>${eur(x.base)}</td><td>${pct(x.tipo)}</td><td>${eur(x.cuota)}</td></tr>`);detail+='</table></div>'}$('taxDetail').innerHTML=detail;drawCharts(alloc,data)}
-function drawCharts(alloc,data){drawPie(alloc);drawBars(data);drawLine()}
-function drawPie(items){const c=$('pieChart'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);const total=items.reduce((s,x)=>s+Math.max(x.value,0),0);if(!total){ctx.fillText('Sin datos',20,30);return}let a=-Math.PI/2;const colors=['#2563eb','#10b981','#f97316','#8b5cf6','#ef4444','#14b8a6','#eab308'];items.forEach((it,i)=>{const slice=Math.max(it.value,0)/total*Math.PI*2;ctx.beginPath();ctx.moveTo(135,135);ctx.arc(135,135,100,a,a+slice);ctx.closePath();ctx.fillStyle=colors[i%colors.length];ctx.fill();a+=slice;ctx.fillStyle='#0f172a';ctx.fillText(`${it.ticker} ${Math.round(it.value/total*100)}%`,270,30+i*20)});}
-function drawBars(data){const c=$('barChart'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);const vals=data.map(d=>parseEuro(d._tr.cells[16].textContent)||0);if(!vals.some(v=>v)){ctx.fillText('Sin datos',20,30);return}const max=Math.max(...vals.map(v=>Math.abs(v)),1);data.forEach((d,i)=>{const v=vals[i];const x=40+i*55;const h=Math.abs(v)/max*95;ctx.fillStyle=v>=0?'#059669':'#dc2626';ctx.fillRect(x,135-(v>=0?h:0),35,h);ctx.fillStyle='#0f172a';ctx.fillText(d.ticker,x,250);});ctx.strokeStyle='#94a3b8';ctx.beginPath();ctx.moveTo(20,135);ctx.lineTo(c.width-20,135);ctx.stroke();}
-function drawLine(){const c=$('lineChart'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);const h=JSON.parse(localStorage.getItem('pro2_history')||'[]');if(h.length<2){ctx.fillText('Se genera al actualizar varios días/sesiones',20,30);return}const vals=h.map(x=>x.value),min=Math.min(...vals),max=Math.max(...vals);ctx.strokeStyle='#2563eb';ctx.lineWidth=3;ctx.beginPath();h.forEach((p,i)=>{const x=30+i*(c.width-60)/(h.length-1);const y=230-((p.value-min)/(max-min||1))*180;if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y)});ctx.stroke();ctx.fillStyle='#0f172a';ctx.fillText(eur(vals[vals.length-1]),20,25)}
-function saveSnapshot(){const val=parseEuro([...document.querySelectorAll('.kpi strong')][0]?.textContent)||0;if(!val)return;let h=JSON.parse(localStorage.getItem('pro2_history')||'[]');h.push({date:new Date().toISOString(),value:val});if(h.length>60)h=h.slice(-60);localStorage.setItem('pro2_history',JSON.stringify(h))}function clearHistory(){localStorage.removeItem('pro2_history');drawLine()}
-function saveApi(){localStorage.setItem('finnhub_api_key',$('apiKey').value.trim());alert('API guardada.')}function clearApi(){localStorage.removeItem('finnhub_api_key');$('apiKey').value=''}
-function saveAll(show=true){const data={api:$('apiKey').value,manualFx:$('manualFx').value,valuationDate:$('valuationDate').value,taxYear:$('taxYear').value,otherGains:$('otherGains').value,losses:$('losses').value,custody:$('custody').value,positions:rows().map(({_tr,...x})=>x)};localStorage.setItem('mi_cartera_pro2',JSON.stringify(data));if(show)alert('Cartera guardada.')}
-function loadAll(show=false){$('valuationDate').value=$('valuationDate').value||todayISO();const api=localStorage.getItem('finnhub_api_key');if(api)$('apiKey').value=api;const raw=localStorage.getItem('mi_cartera_pro2');tbody().innerHTML='';if(!raw){addRow({ticker:'NVDA',currency:'USD',foreignPct:15,spainPct:19,buyFee:0,sellFee:0,divGross:0});calcTotals();return}const d=JSON.parse(raw);['manualFx','valuationDate','taxYear','otherGains','losses','custody'].forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]});if(d.api&&!api)$('apiKey').value=d.api;(d.positions||[]).forEach(addRow);if(!(d.positions||[]).length)addRow();calcTotals();if(show)alert('Cartera cargada.')}
-function clearPortfolio(){if(confirm('¿Vaciar todas las posiciones?')){tbody().innerHTML='';addRow();calcTotals();saveAll(false)}}function exportCSV(){const header=['Ticker','Notas','Fecha compra','Moneda','Precio compra','Acciones','FX compra','Comision compra EUR','Precio manual','Comision venta EUR','Dividendos brutos EUR','Ret extranj %','Ret Espana %'];const lines=[header.join(';')];rows().forEach(d=>lines.push([d.ticker,d.note,d.buyDate,d.currency,d.buy,d.shares,d.fxBuy,d.buyFee,d.manualPrice,d.sellFee,d.divGross,d.foreignPct,d.spainPct].join(';')));download('mi_cartera_pro2.csv',lines.join('\n'),'text/csv;charset=utf-8')}function exportJSON(){saveAll(false);download('mi_cartera_pro2_backup.json',localStorage.getItem('mi_cartera_pro2')||'{}','application/json')}function importJSONPrompt(){const txt=prompt('Pega aquí el JSON de copia de seguridad');if(!txt)return;try{JSON.parse(txt);localStorage.setItem('mi_cartera_pro2',txt);loadAll(true)}catch(e){alert('JSON no válido')}}function download(name,content,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}function attachInputs(){document.querySelectorAll('input,select').forEach(el=>{el.onchange=()=>{calcTotals();saveAll(false)}})}['otherGains','losses','custody','valuationDate'].forEach(id=>$(id).addEventListener('input',()=>{calcTotals();saveAll(false)}));loadAll(false);attachInputs();
+
+function calcular(){
+
+  let buy = parseFloat(document.getElementById("buy").value);
+  let shares = parseFloat(document.getElementById("shares").value);
+  let price = parseFloat(document.getElementById("price").value);
+  let fx = parseFloat(document.getElementById("fx").value);
+
+  if(isNaN(buy) || isNaN(shares) || isNaN(price) || isNaN(fx)){
+    alert("Faltan datos");
+    return;
+  }
+
+  let coste = buy * shares;
+  let valor = price * shares * fx;
+  let ganancia = valor - coste;
+  let rent = (ganancia / coste) * 100;
+
+  document.getElementById("valor").innerHTML =
+    "💰 Valor cartera: " + valor.toFixed(2) + " €";
+
+  document.getElementById("ganancia").innerHTML =
+    "📈 Ganancia: <span class='" + (ganancia>=0?"pos":"neg") + "'>" +
+    ganancia.toFixed(2) + " €</span>";
+
+  document.getElementById("rentabilidad").innerHTML =
+    "📊 Rentabilidad: " + rent.toFixed(2) + " %";
+}
+
 </script>
+
 </body>
 </html>
