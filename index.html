@@ -3,112 +3,754 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi Cartera Pro (FIX)</title>
+<title>Mi Cartera Final</title>
 
 <style>
+:root{
+  --bg:#eef2f7;
+  --card:#ffffff;
+  --ink:#111827;
+  --muted:#64748b;
+  --line:#dbe3ef;
+  --blue:#2563eb;
+  --green:#059669;
+  --red:#dc2626;
+  --amber:#d97706;
+  --soft:#f8fafc;
+}
+*{box-sizing:border-box}
 body{
-  font-family:Arial;
-  background:#f5f7fa;
-  padding:20px;
+  margin:0;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--ink);
 }
-h2{
-  color:#1e3a8a;
+header{
+  background:linear-gradient(135deg,#020617,#1e3a8a);
+  color:white;
+  padding:24px 16px;
+  text-align:center;
 }
+header h1{margin:0;font-size:24px}
+header p{margin:6px 0 0;color:#bfdbfe;font-size:13px}
+.wrap{max-width:1250px;margin:0 auto;padding:12px}
 .card{
   background:white;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
-  margin-bottom:20px;
+  border-radius:18px;
+  padding:15px;
+  margin-bottom:15px;
+  box-shadow:0 8px 24px rgba(15,23,42,.08);
+  border:1px solid rgba(148,163,184,.25);
 }
-input{
+h2{font-size:18px;margin:0 0 12px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
+  gap:11px;
+}
+label{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  color:#334155;
+  margin-bottom:5px;
+}
+input,select,button{
   width:100%;
   padding:10px;
-  margin-bottom:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
+  border-radius:11px;
+  border:1px solid var(--line);
+  font-size:15px;
+  background:white;
 }
 button{
-  padding:12px;
-  width:100%;
   border:none;
-  border-radius:8px;
-  background:#2563eb;
+  background:var(--blue);
   color:white;
-  font-weight:bold;
+  font-weight:850;
+  cursor:pointer;
 }
-.result{
-  font-size:18px;
-  margin-top:10px;
+button.secondary{background:#475569}
+button.good{background:#059669}
+button.warn{background:#d97706}
+button.danger{background:#dc2626}
+.btns{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
+  gap:9px;
+  margin-top:12px;
 }
-.pos{color:green;font-weight:bold}
-.neg{color:red;font-weight:bold}
+.note{
+  background:#fffbeb;
+  border-left:5px solid #f59e0b;
+  border-radius:12px;
+  padding:12px;
+  line-height:1.45;
+  font-size:13px;
+}
+.oknote{
+  background:#ecfdf5;
+  border-left-color:#10b981;
+}
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:white;
+}
+table{
+  border-collapse:collapse;
+  width:100%;
+  min-width:1700px;
+}
+th,td{
+  padding:8px;
+  border-bottom:1px solid var(--line);
+  font-size:13px;
+  text-align:right;
+  vertical-align:middle;
+}
+th:first-child,td:first-child{text-align:left}
+th{
+  background:#f8fafc;
+  color:#334155;
+}
+td input,td select{
+  min-width:82px;
+  padding:8px;
+  font-size:13px;
+}
+.ticker input{
+  text-transform:uppercase;
+  font-weight:900;
+}
+.summary{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
+  gap:10px;
+}
+.kpi{
+  background:var(--soft);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px;
+}
+.kpi small{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+}
+.kpi strong{
+  display:block;
+  font-size:20px;
+  margin-top:5px;
+}
+.pos{color:var(--green)!important;font-weight:900}
+.neg{color:var(--red)!important;font-weight:900}
+.muted{color:var(--muted);font-size:12px}
+.debug{
+  white-space:pre-wrap;
+  background:#0f172a;
+  color:#e5e7eb;
+  border-radius:12px;
+  padding:12px;
+  font-size:12px;
+  display:none;
+}
+.charts{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:14px;
+}
+.chartbox{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+}
+canvas{width:100%;height:250px}
+@media(max-width:760px){
+  .wrap{padding:10px}
+  .summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi strong{font-size:17px}
+  table{min-width:1650px}
+  th,td{font-size:12px;padding:7px}
+}
 </style>
-
 </head>
 
 <body>
 
-<h2>📈 Mi Cartera (VERSIÓN QUE FUNCIONA)</h2>
+<header>
+  <h1>📈 Mi Cartera Final</h1>
+  <p>Manual + Finnhub + Yahoo · acciones · ETF · fondos · monetarios · FX · gastos · gráficos</p>
+</header>
 
-<div class="card">
+<div class="wrap">
 
-<label>Precio compra</label>
-<input id="buy">
+<section class="card note oknote">
+  <strong>Versión final estable:</strong> si introduces precio actual manual, la app lo usa siempre.
+  Si eliges Finnhub o Yahoo, intenta traer cotización, pero si falla, puedes calcular manualmente.
+</section>
 
-<label>Acciones</label>
-<input id="shares">
+<section class="card">
+  <h2>🔑 Configuración</h2>
+  <div class="grid">
+    <div>
+      <label>API Key Finnhub</label>
+      <input id="apiKey" placeholder="Opcional para Finnhub">
+    </div>
+    <div>
+      <label>FX actual USD→EUR manual</label>
+      <input id="fxNow" placeholder="Ej. 0.92">
+    </div>
+    <div>
+      <label>Fecha de valoración</label>
+      <input id="valuationDate" type="date">
+    </div>
+  </div>
+  <div class="btns">
+    <button onclick="saveApi()">Guardar API</button>
+    <button class="secondary" onclick="clearApi()">Borrar API</button>
+    <button class="good" onclick="saveAll()">Guardar cartera</button>
+    <button class="secondary" onclick="loadAll(true)">Cargar cartera</button>
+  </div>
+</section>
 
-<label>Precio actual</label>
-<input id="price">
+<section class="card">
+  <h2>💼 Posiciones</h2>
+  <div class="table-wrap">
+    <table id="positions">
+      <thead>
+        <tr>
+          <th>Ticker / ISIN</th>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Fuente</th>
+          <th>Fecha compra</th>
+          <th>Antigüedad</th>
+          <th>Moneda</th>
+          <th>Precio compra</th>
+          <th>Unidades</th>
+          <th>FX compra</th>
+          <th>Comisión compra €</th>
+          <th>Precio actual manual</th>
+          <th>Comisión venta €</th>
+          <th>Dividendos / cupón €</th>
+          <th>Ret. extranj. %</th>
+          <th>Ret. España %</th>
+          <th>Precio usado</th>
+          <th>Valor €</th>
+          <th>Coste €</th>
+          <th>Ganancia €</th>
+          <th>Efecto precio €</th>
+          <th>Efecto FX €</th>
+          <th>Rentab.</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-<label>FX (si USD → ej 0.92)</label>
-<input id="fx" value="1">
+  <div class="btns">
+    <button onclick="addRow()">➕ Añadir</button>
+    <button class="warn" onclick="calculateAll()">📈 Calcular / actualizar</button>
+    <button class="good" onclick="exportCSV()">⬇️ Exportar CSV</button>
+    <button class="secondary" onclick="exportJSON()">⬇️ Copia JSON</button>
+    <button class="secondary" onclick="toggleDebug()">🐞 Debug</button>
+    <button class="danger" onclick="clearPortfolio()">🗑️ Vaciar</button>
+  </div>
+</section>
 
-<button onclick="calcular()">CALCULAR</button>
+<section class="card">
+  <h2>🧾 Ajustes fiscales globales</h2>
+  <div class="grid">
+    <div>
+      <label>Otras plusvalías realizadas (€)</label>
+      <input id="otherGains" value="0">
+    </div>
+    <div>
+      <label>Minusvalías realizadas / pendientes (€)</label>
+      <input id="losses" value="0">
+    </div>
+    <div>
+      <label>Gastos custodia / administración (€)</label>
+      <input id="custody" value="0">
+    </div>
+  </div>
+</section>
 
-</div>
+<section class="card">
+  <h2>📌 Resumen</h2>
+  <div id="kpis" class="summary"></div>
+  <div id="taxDetail" style="margin-top:14px"></div>
+  <div id="debug" class="debug"></div>
+</section>
 
-<div class="card">
+<section class="card">
+  <h2>📊 Gráficos</h2>
+  <div class="charts">
+    <div class="chartbox">
+      <h3>Distribución por valor</h3>
+      <canvas id="pieChart" width="420" height="280"></canvas>
+    </div>
+    <div class="chartbox">
+      <h3>Ganancia por posición</h3>
+      <canvas id="barChart" width="420" height="280"></canvas>
+    </div>
+  </div>
+</section>
 
-<h3>📊 Resultado</h3>
-
-<div class="result" id="valor"></div>
-<div class="result" id="ganancia"></div>
-<div class="result" id="rentabilidad"></div>
+<section class="card note">
+  <strong>Notas:</strong><br>
+  1. Para acciones/ETF USA usa ticker Yahoo/Finnhub tipo <strong>NVDA</strong>.<br>
+  2. Para fondos o monetarios, lo más fiable suele ser usar <strong>fuente Manual</strong> y meter valor liquidativo/precio actual manual.<br>
+  3. Yahoo desde GitHub Pages puede fallar por CORS/cookies; Finnhub suele ser más estable con API Key.<br>
+  4. El cálculo fiscal es orientativo y no sustituye Renta Web.
+</section>
 
 </div>
 
 <script>
+const TRAMOS = [
+  {hasta:6000,tipo:.19},
+  {hasta:50000,tipo:.21},
+  {hasta:200000,tipo:.23},
+  {hasta:300000,tipo:.27},
+  {hasta:Infinity,tipo:.30}
+];
 
-function calcular(){
+const $ = id => document.getElementById(id);
+const TB = () => $('positions').querySelector('tbody');
 
-  let buy = parseFloat(document.getElementById("buy").value);
-  let shares = parseFloat(document.getElementById("shares").value);
-  let price = parseFloat(document.getElementById("price").value);
-  let fx = parseFloat(document.getElementById("fx").value);
+function n(v){
+  if(v === undefined || v === null) return 0;
+  let s = String(v).trim();
+  if(!s) return 0;
+  s = s.replace(/\./g,'#').replace(',','.').replace(/#/g,'');
+  let x = parseFloat(s);
+  if(isNaN(x)){
+    s = String(v).trim().replace(',','.');
+    x = parseFloat(s);
+  }
+  return isNaN(x) ? 0 : x;
+}
 
-  if(isNaN(buy) || isNaN(shares) || isNaN(price) || isNaN(fx)){
-    alert("Faltan datos");
+function eur(x){
+  return (x||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+}
+function usd(x){
+  return (x||0).toLocaleString('en-US',{style:'currency',currency:'USD'});
+}
+function pct(x){
+  return ((x||0)*100).toFixed(2)+' %';
+}
+function cls(x){
+  return x>=0?'pos':'neg';
+}
+function today(){
+  return new Date().toISOString().slice(0,10);
+}
+function tax(base){
+  let imp=0,prev=0,det=[];
+  if(base<=0) return {imp:0,det:[]};
+  for(const tr of TRAMOS){
+    let b = Math.min(base,tr.hasta)-prev;
+    if(b>0){
+      let cuota=b*tr.tipo;
+      imp+=cuota;
+      det.push({desde:prev,hasta:tr.hasta,base:b,tipo:tr.tipo,cuota});
+    }
+    prev=tr.hasta;
+    if(base<=tr.hasta) break;
+  }
+  return {imp,det};
+}
+function age(date){
+  if(!date) return '-';
+  let d = Math.floor((new Date($('valuationDate').value || today()) - new Date(date))/86400000);
+  let y = Math.max(d/365.25,0);
+  return `${Math.max(d,0)} días / ${y.toFixed(2)} años`;
+}
+
+function rowHTML(d={}){
+  return `
+<tr>
+<td class="ticker"><input value="${d.ticker||''}" placeholder="NVDA / ISIN"></td>
+<td><input value="${d.name||''}" placeholder="Nombre"></td>
+<td>
+<select>
+<option ${d.type==='Acción'?'selected':''}>Acción</option>
+<option ${d.type==='ETF'?'selected':''}>ETF</option>
+<option ${d.type==='Fondo'?'selected':''}>Fondo</option>
+<option ${d.type==='Monetario'?'selected':''}>Monetario</option>
+<option ${d.type==='Cash'?'selected':''}>Cash</option>
+</select>
+</td>
+<td>
+<select>
+<option ${d.source==='Manual'?'selected':''}>Manual</option>
+<option ${d.source==='Finnhub'?'selected':''}>Finnhub</option>
+<option ${d.source==='Yahoo'?'selected':''}>Yahoo</option>
+</select>
+</td>
+<td><input type="date" value="${d.buyDate||''}"></td>
+<td class="muted">-</td>
+<td>
+<select>
+<option ${d.currency==='USD'?'selected':''}>USD</option>
+<option ${d.currency==='EUR'?'selected':''}>EUR</option>
+</select>
+</td>
+<td><input value="${d.buy||''}"></td>
+<td><input value="${d.units||''}"></td>
+<td><input value="${d.fxBuy||''}" placeholder="1 si EUR"></td>
+<td><input value="${d.buyFee??0}"></td>
+<td><input value="${d.manualPrice||''}" placeholder="Si manual"></td>
+<td><input value="${d.sellFee??0}"></td>
+<td><input value="${d.divGross??0}"></td>
+<td><input value="${d.foreignPct??(d.currency==='USD'?15:0)}"></td>
+<td><input value="${d.spainPct??19}"></td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td class="muted">-</td>
+<td><button class="danger" onclick="this.closest('tr').remove(); calculateAll(); saveAll(false)">X</button></td>
+</tr>`;
+}
+
+function addRow(d){
+  TB().insertAdjacentHTML('beforeend',rowHTML(d));
+  attachAutoSave();
+}
+
+function rows(){
+  return [...TB().rows].map(r=>{
+    let c=r.cells;
+    return{
+      ticker:c[0].querySelector('input').value.trim().toUpperCase(),
+      name:c[1].querySelector('input').value,
+      type:c[2].querySelector('select').value,
+      source:c[3].querySelector('select').value,
+      buyDate:c[4].querySelector('input').value,
+      currency:c[6].querySelector('select').value,
+      buy:n(c[7].querySelector('input').value),
+      units:n(c[8].querySelector('input').value),
+      fxBuy:n(c[9].querySelector('input').value),
+      buyFee:n(c[10].querySelector('input').value),
+      manualPrice:n(c[11].querySelector('input').value),
+      sellFee:n(c[12].querySelector('input').value),
+      divGross:n(c[13].querySelector('input').value),
+      foreignPct:n(c[14].querySelector('input').value),
+      spainPct:n(c[15].querySelector('input').value),
+      _tr:r
+    }
+  });
+}
+
+function setCell(r,i,html,cl=''){
+  r.cells[i].innerHTML=html;
+  r.cells[i].className=cl;
+}
+
+async function getFinnhub(ticker){
+  const key=$('apiKey').value.trim();
+  if(!key) throw new Error('Falta API Finnhub');
+  const url=`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(ticker)}&token=${encodeURIComponent(key)}`;
+  const res=await fetch(url);
+  const data=await res.json();
+  if(!data || !data.c) throw new Error('Finnhub no devolvió precio');
+  return data.c;
+}
+
+async function getYahoo(ticker){
+  const url=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=1d`;
+  const res=await fetch(url);
+  const data=await res.json();
+  const result=data?.chart?.result?.[0];
+  const price=result?.meta?.regularMarketPrice;
+  if(!price) throw new Error('Yahoo no devolvió precio');
+  return price;
+}
+
+async function calculateAll(){
+  let data=rows();
+  let fxNow=n($('fxNow').value);
+  let debug=[];
+
+  let totalCost=0,totalValue=0,totalGain=0,totalPriceEffect=0,totalFxEffect=0;
+  let div=0,foreign=0,spain=0;
+  let alloc=[];
+
+  for(const d of data){
+    setCell(d._tr,5,age(d.buyDate),'muted');
+
+    if(!d.ticker && d.type!=='Cash'){
+      debug.push('Fila sin ticker/ISIN.');
+      continue;
+    }
+    if(!d.buy || !d.units){
+      debug.push(`${d.ticker||d.name}: faltan precio compra o unidades.`);
+      continue;
+    }
+
+    let localFxBuy = d.currency==='USD' ? d.fxBuy : 1;
+    let localFxNow = d.currency==='USD' ? fxNow : 1;
+
+    if(d.currency==='USD' && !localFxBuy){
+      debug.push(`${d.ticker}: falta FX compra.`);
+      continue;
+    }
+    if(d.currency==='USD' && !localFxNow){
+      debug.push(`${d.ticker}: falta FX actual.`);
+      continue;
+    }
+
+    let price = d.manualPrice;
+
+    if(!price && d.source==='Finnhub'){
+      try{ price = await getFinnhub(d.ticker); }
+      catch(e){ debug.push(`${d.ticker}: Finnhub falla: ${e.message}`); }
+    }
+
+    if(!price && d.source==='Yahoo'){
+      try{ price = await getYahoo(d.ticker); }
+      catch(e){ debug.push(`${d.ticker}: Yahoo falla: ${e.message}`); }
+    }
+
+    if(!price){
+      debug.push(`${d.ticker||d.name}: falta precio actual manual o API válida.`);
+      continue;
+    }
+
+    const costNoFees = d.buy * d.units * localFxBuy;
+    const cost = costNoFees + d.buyFee;
+
+    const valueAtBuyFx = price * d.units * localFxBuy;
+    const valueGross = price * d.units * localFxNow;
+    const value = valueGross - d.sellFee;
+
+    const gain = value - cost;
+    const priceEffect = valueAtBuyFx - costNoFees;
+    const fxEffect = valueGross - valueAtBuyFx;
+    const ret = cost ? gain / cost : 0;
+
+    totalCost += cost;
+    totalValue += value;
+    totalGain += gain;
+    totalPriceEffect += priceEffect;
+    totalFxEffect += fxEffect;
+
+    div += d.divGross;
+    foreign += d.divGross * (d.foreignPct/100);
+    spain += d.divGross * (d.spainPct/100);
+
+    alloc.push({ticker:d.ticker||d.name,value,gain});
+
+    setCell(d._tr,16,d.currency==='USD'?usd(price):eur(price));
+    setCell(d._tr,17,eur(value));
+    setCell(d._tr,18,eur(cost));
+    setCell(d._tr,19,eur(gain),cls(gain));
+    setCell(d._tr,20,eur(priceEffect),cls(priceEffect));
+    setCell(d._tr,21,eur(fxEffect),cls(fxEffect));
+    setCell(d._tr,22,pct(ret),cls(ret));
+  }
+
+  const base = Math.max(
+    Math.max(totalGain,0) + n($('otherGains').value) + div - n($('losses').value) - n($('custody').value),
+    0
+  );
+
+  const tx = tax(base);
+  const divTax = base && div ? tx.imp * (div/base) : 0;
+  const credit = Math.min(foreign,divTax);
+  const divNet = div - foreign - spain - Math.max(divTax - spain - credit,0);
+  const gainTax = base && totalGain>0 ? tx.imp*(Math.max(totalGain,0)/base) : 0;
+
+  $('kpis').innerHTML = `
+<div class="kpi"><small>Valor cartera</small><strong>${eur(totalValue)}</strong></div>
+<div class="kpi"><small>Coste total</small><strong>${eur(totalCost)}</strong></div>
+<div class="kpi"><small>Ganancia latente</small><strong class="${cls(totalGain)}">${eur(totalGain)}</strong></div>
+<div class="kpi"><small>Rentabilidad</small><strong class="${cls(totalGain)}">${totalCost?pct(totalGain/totalCost):'0,00 %'}</strong></div>
+<div class="kpi"><small>Efecto precio</small><strong class="${cls(totalPriceEffect)}">${eur(totalPriceEffect)}</strong></div>
+<div class="kpi"><small>Efecto FX</small><strong class="${cls(totalFxEffect)}">${eur(totalFxEffect)}</strong></div>
+<div class="kpi"><small>Dividendos brutos</small><strong>${eur(div)}</strong></div>
+<div class="kpi"><small>Dividendos netos estimados</small><strong>${eur(divNet)}</strong></div>
+<div class="kpi"><small>Base ahorro estimada</small><strong>${eur(base)}</strong></div>
+<div class="kpi"><small>IRPF estimado</small><strong>${eur(tx.imp)}</strong></div>
+<div class="kpi"><small>Ganancia tras IRPF aprox.</small><strong class="${cls(totalGain-gainTax)}">${eur(totalGain-gainTax)}</strong></div>
+`;
+
+  $('taxDetail').innerHTML = tx.det.length
+    ? '<h2>Detalle IRPF</h2><div class="table-wrap"><table style="min-width:650px"><tr><th>Tramo</th><th>Base</th><th>Tipo</th><th>Cuota</th></tr>' +
+      tx.det.map(x=>`<tr><td>${eur(x.desde)} - ${x.hasta===Infinity?'En adelante':eur(x.hasta)}</td><td>${eur(x.base)}</td><td>${pct(x.tipo)}</td><td>${eur(x.cuota)}</td></tr>`).join('') +
+      '</table></div>'
+    : '';
+
+  drawCharts(alloc);
+  $('debug').textContent = debug.length ? debug.join('\n') : 'Sin errores detectados.';
+  saveAll(false);
+}
+
+function drawCharts(items){
+  drawPie(items);
+  drawBars(items);
+}
+
+function drawPie(items){
+  const c=$('pieChart'),ctx=c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
+  const total=items.reduce((s,x)=>s+Math.max(x.value,0),0);
+  if(!total){ctx.fillText('Sin datos',20,30);return;}
+  let a=-Math.PI/2;
+  const colors=['#2563eb','#10b981','#f97316','#8b5cf6','#ef4444','#14b8a6','#eab308'];
+  items.forEach((it,i)=>{
+    let slice=Math.max(it.value,0)/total*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(135,135);
+    ctx.arc(135,135,100,a,a+slice);
+    ctx.closePath();
+    ctx.fillStyle=colors[i%colors.length];
+    ctx.fill();
+    a+=slice;
+    ctx.fillStyle='#111827';
+    ctx.fillText(`${it.ticker} ${Math.round(it.value/total*100)}%`,270,30+i*20);
+  });
+}
+
+function drawBars(items){
+  const c=$('barChart'),ctx=c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
+  if(!items.length){ctx.fillText('Sin datos',20,30);return;}
+  const max=Math.max(...items.map(x=>Math.abs(x.gain)),1);
+  items.forEach((it,i)=>{
+    const x=40+i*55;
+    const h=Math.abs(it.gain)/max*95;
+    ctx.fillStyle=it.gain>=0?'#059669':'#dc2626';
+    ctx.fillRect(x,135-(it.gain>=0?h:0),35,h);
+    ctx.fillStyle='#111827';
+    ctx.fillText(it.ticker,x,250);
+  });
+  ctx.strokeStyle='#94a3b8';
+  ctx.beginPath();
+  ctx.moveTo(20,135);
+  ctx.lineTo(c.width-20,135);
+  ctx.stroke();
+}
+
+function saveApi(){
+  localStorage.setItem('finnhub_api_key',$('apiKey').value.trim());
+  alert('API guardada.');
+}
+function clearApi(){
+  localStorage.removeItem('finnhub_api_key');
+  $('apiKey').value='';
+}
+function saveAll(show=true){
+  const data={
+    api:$('apiKey').value,
+    fxNow:$('fxNow').value,
+    valuationDate:$('valuationDate').value,
+    otherGains:$('otherGains').value,
+    losses:$('losses').value,
+    custody:$('custody').value,
+    positions:rows().map(({_tr,...x})=>x)
+  };
+  localStorage.setItem('cartera_final',JSON.stringify(data));
+  if(show) alert('Cartera guardada.');
+}
+function loadAll(show=false){
+  $('valuationDate').value = $('valuationDate').value || today();
+  const api=localStorage.getItem('finnhub_api_key');
+  if(api) $('apiKey').value=api;
+
+  const raw=localStorage.getItem('cartera_final');
+  TB().innerHTML='';
+
+  if(!raw){
+    addRow({
+      ticker:'NVDA',
+      name:'NVIDIA',
+      type:'Acción',
+      source:'Manual',
+      currency:'USD',
+      foreignPct:15,
+      spainPct:19,
+      buyFee:0,
+      sellFee:0,
+      divGross:0
+    });
+    calculateAll();
     return;
   }
 
-  let coste = buy * shares;
-  let valor = price * shares * fx;
-  let ganancia = valor - coste;
-  let rent = (ganancia / coste) * 100;
-
-  document.getElementById("valor").innerHTML =
-    "💰 Valor cartera: " + valor.toFixed(2) + " €";
-
-  document.getElementById("ganancia").innerHTML =
-    "📈 Ganancia: <span class='" + (ganancia>=0?"pos":"neg") + "'>" +
-    ganancia.toFixed(2) + " €</span>";
-
-  document.getElementById("rentabilidad").innerHTML =
-    "📊 Rentabilidad: " + rent.toFixed(2) + " %";
+  const d=JSON.parse(raw);
+  ['fxNow','valuationDate','otherGains','losses','custody'].forEach(id=>{
+    if(d[id]!==undefined) $(id).value=d[id];
+  });
+  if(d.api && !api) $('apiKey').value=d.api;
+  (d.positions||[]).forEach(addRow);
+  if(!(d.positions||[]).length) addRow();
+  calculateAll();
+  if(show) alert('Cartera cargada.');
 }
 
+function clearPortfolio(){
+  if(confirm('¿Vaciar posiciones?')){
+    TB().innerHTML='';
+    addRow();
+    calculateAll();
+    saveAll(false);
+  }
+}
+function exportCSV(){
+  const header=[
+    'Ticker','Nombre','Tipo','Fuente','Fecha compra','Moneda','Precio compra','Unidades',
+    'FX compra','Comision compra EUR','Precio actual manual','Comision venta EUR',
+    'Dividendos brutos EUR','Ret extranj %','Ret Espana %'
+  ];
+  const lines=[header.join(';')];
+  rows().forEach(d=>{
+    lines.push([
+      d.ticker,d.name,d.type,d.source,d.buyDate,d.currency,d.buy,d.units,d.fxBuy,d.buyFee,
+      d.manualPrice,d.sellFee,d.divGross,d.foreignPct,d.spainPct
+    ].join(';'));
+  });
+  download('mi_cartera_final.csv',lines.join('\n'),'text/csv;charset=utf-8');
+}
+function exportJSON(){
+  saveAll(false);
+  download('mi_cartera_final_backup.json',localStorage.getItem('cartera_final')||'{}','application/json');
+}
+function download(name,content,type){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function toggleDebug(){
+  const d=$('debug');
+  d.style.display = d.style.display==='block' ? 'none' : 'block';
+}
+function attachAutoSave(){
+  document.querySelectorAll('input,select').forEach(el=>{
+    el.onchange=()=>saveAll(false);
+  });
+}
+['otherGains','losses','custody','valuationDate','fxNow'].forEach(id=>{
+  $(id).addEventListener('input',()=>saveAll(false));
+});
+
+loadAll(false);
+attachAutoSave();
 </script>
 
 </body>
